@@ -3,73 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Burgers & Brisket — Two Worlds, One Score</title>
+<title>Burgers & Brisket — Smoke. Sear. Score.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Lilita+One&family=Hanken+Grotesk:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 <style>
-  /* ============ THEME ENGINE ============ */
   body[data-theme="bbq"]{
-    --bg:#160F0C; --surface:#22160F; --surface2:#2E1F16; --chip:#160F0C;
-    --ink:#F8EEDC; --muted:#C9B7A2; --faint:#8A7868;
-    --primary:#EA5318; --secondary:#F4A81E; --accent3:#B22D17;
-    --line:rgba(248,238,220,.12);
-    --display:'Anton',sans-serif; --tt:uppercase; --ls:.5px;
+    --bg:#160F0C;--surface:#22160F;--surface2:#2E1F16;--chip:#160F0C;
+    --ink:#F8EEDC;--muted:#C9B7A2;--faint:#8A7868;
+    --primary:#EA5318;--secondary:#F4A81E;--accent3:#B22D17;
+    --line:rgba(248,238,220,.12);--display:'Anton',sans-serif;--tt:uppercase;--ls:.5px;
     --badge:radial-gradient(circle at 30% 25%,#F4A81E,#EA5318 55%,#B22D17);
     --shadow:0 24px 60px -18px rgba(0,0,0,.7);
     --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     --grain-op:.06;
   }
   body[data-theme="burger"]{
-    --bg:#FFF3DD; --surface:#FFFFFF; --surface2:#FFE9C7; --chip:#2A1206;
-    --ink:#2A1206; --muted:#8A6240; --faint:#BC9970;
-    --primary:#E8402C; --secondary:#FBB829; --accent3:#3FA64C;
-    --line:rgba(42,18,6,.13);
-    --display:'Lilita One',cursive; --tt:none; --ls:.3px;
+    --bg:#FFF3DD;--surface:#FFFFFF;--surface2:#FFE9C7;--chip:#2A1206;
+    --ink:#2A1206;--muted:#8A6240;--faint:#BC9970;
+    --primary:#E8402C;--secondary:#FBB829;--accent3:#3FA64C;
+    --line:rgba(42,18,6,.13);--display:'Lilita One',cursive;--tt:none;--ls:.3px;
     --badge:radial-gradient(circle at 30% 25%,#FFD23F,#FBB829 48%,#E8402C);
     --shadow:0 22px 48px -20px rgba(232,64,44,.42);
     --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='46' height='46'%3E%3Cg fill='%23E8B770'%3E%3Cellipse cx='9' cy='10' rx='2.1' ry='1.3'/%3E%3Cellipse cx='30' cy='24' rx='2.1' ry='1.3' transform='rotate(35 30 24)'/%3E%3Cellipse cx='18' cy='37' rx='2.1' ry='1.3' transform='rotate(-20 18 37)'/%3E%3Cellipse cx='40' cy='7' rx='2.1' ry='1.3' transform='rotate(20 40 7)'/%3E%3C/g%3E%3C/svg%3E");
     --grain-op:.5;
   }
-
   *{margin:0;padding:0;box-sizing:border-box}
   *{transition:background-color .45s ease,border-color .45s ease,color .3s ease,fill .45s ease}
   html{scroll-behavior:smooth}
   body{font-family:'Hanken Grotesk',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased}
   body::before{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:var(--grain-op);background-image:var(--grain)}
-  h1,h2,h3,.display{font-family:var(--display);font-weight:400;letter-spacing:var(--ls);line-height:.94;text-transform:var(--tt)}
+  h1,h2,h3{font-family:var(--display);font-weight:400;letter-spacing:var(--ls);line-height:.94;text-transform:var(--tt)}
   .scribble{font-family:'Caveat',cursive}
   ::selection{background:var(--primary);color:#fff}
-  .seal-ink{color:#1d120a}
-
-  /* ---------- NAV ---------- */
-  .nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
-    padding:13px 22px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-  .brand{display:flex;align-items:center;gap:12px;cursor:pointer}
-  .badge{width:46px;height:46px;border-radius:50%;flex:0 0 auto;background:var(--badge);display:grid;place-items:center;
-    box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--secondary),0 8px 20px rgba(0,0,0,.3)}
+  .nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:13px 22px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .badge{width:46px;height:46px;border-radius:50%;flex:0 0 auto;background:var(--badge);display:grid;place-items:center;box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--secondary),0 8px 20px rgba(0,0,0,.3)}
   .badge span{font-family:var(--display);font-size:18px;color:#1d120a;letter-spacing:-1px}
   .wordmark{font-family:var(--display);font-size:20px;letter-spacing:.4px;line-height:.86;color:var(--ink);text-transform:none}
   .wordmark small{display:block;font-family:'Hanken Grotesk';font-weight:800;font-size:8px;letter-spacing:2.6px;color:var(--primary);margin-top:4px}
-
-  /* world toggle */
   .world-toggle{display:flex;gap:5px;background:var(--surface);padding:5px;border-radius:50px;border:1px solid var(--line);box-shadow:var(--shadow)}
-  .world-btn{border:none;background:none;color:var(--muted);font-family:'Hanken Grotesk';font-weight:800;font-size:13px;
-    padding:10px 18px;border-radius:40px;cursor:pointer;white-space:nowrap}
+  .world-btn{border:none;background:none;color:var(--muted);font-family:'Hanken Grotesk';font-weight:800;font-size:13px;padding:10px 18px;border-radius:40px;cursor:pointer;white-space:nowrap}
   .world-btn.on{background:var(--primary);color:#fff;box-shadow:0 6px 16px -4px var(--primary)}
   .world-btn:hover:not(.on){color:var(--ink)}
-
-  .tabs{display:flex;gap:4px;background:var(--surface);padding:4px;border-radius:40px;border:1px solid var(--line)}
-  .tab{border:none;background:none;color:var(--muted);font-weight:800;font-size:11.5px;letter-spacing:.4px;text-transform:uppercase;padding:9px 13px;border-radius:30px;cursor:pointer}
-  .tab.active{background:var(--ink);color:var(--bg)}
-  .tab:hover:not(.active){color:var(--ink)}
-
-  .screen{display:none;animation:fade .5s ease}
-  .screen.active{display:block}
-  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
   .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
-
-  /* ---------- HERO ---------- */
   .hero{position:relative;padding:62px 0 38px;overflow:hidden}
   .hero::before{content:"";position:absolute;top:-30%;right:-10%;width:70%;height:140%;background:radial-gradient(circle,color-mix(in srgb,var(--primary) 34%,transparent),transparent 62%);z-index:0}
   .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
@@ -83,14 +60,12 @@
   .cta:hover{transform:translateY(-2px);background:var(--secondary);color:#1d120a}
   .stamp{position:absolute;top:26px;right:3%;transform:rotate(11deg);z-index:3;color:var(--primary);font-size:28px;line-height:1;text-align:center}
   .stamp small{display:block;font-family:'Hanken Grotesk';font-weight:800;font-size:9px;letter-spacing:2px;color:var(--ink)}
-
   .feature{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:var(--shadow);transform:rotate(-1.5deg);transition:transform .3s}
   .feature:hover{transform:rotate(0)}
   .ph{position:relative;height:230px;display:grid;place-items:center;font-size:80px;background:linear-gradient(135deg,var(--surface2),var(--bg));overflow:hidden}
   .ph::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 20%,color-mix(in srgb,var(--primary) 40%,transparent),transparent 60%)}
   .ph .emoji{position:relative;z-index:1;filter:drop-shadow(0 10px 18px rgba(0,0,0,.35))}
-  .score-seal{position:absolute;bottom:-26px;right:20px;z-index:4;width:84px;height:84px;border-radius:50%;background:var(--badge);
-    display:grid;place-items:center;text-align:center;color:#1d120a;box-shadow:0 0 0 4px var(--surface),0 12px 24px rgba(0,0,0,.45);transform:rotate(-8deg)}
+  .score-seal{position:absolute;bottom:-26px;right:20px;z-index:4;width:84px;height:84px;border-radius:50%;background:var(--badge);display:grid;place-items:center;text-align:center;color:#1d120a;box-shadow:0 0 0 4px var(--surface),0 12px 24px rgba(0,0,0,.45);transform:rotate(-8deg)}
   .score-seal b{font-family:var(--display);font-size:30px;line-height:.8}
   .score-seal i{font-style:normal;font-family:'Hanken Grotesk';font-weight:800;font-size:9px;letter-spacing:1px}
   .feature-body{padding:26px 24px 24px}
@@ -99,14 +74,11 @@
   .place{display:flex;align-items:center;gap:6px;color:var(--faint);font-size:13.5px;font-weight:700}
   .verdict{margin-top:14px;font-size:15px;color:var(--muted);line-height:1.5}
   .verdict b{color:var(--primary)}
-
-  /* sections */
   .sec{padding:54px 0}
   .sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:30px;gap:20px;flex-wrap:wrap}
   .sec-head h2{font-size:clamp(32px,5vw,54px);color:var(--ink)}
   .sec-head h2 .gold{color:var(--primary)}
   .sec-head p{color:var(--faint);font-weight:700;max-width:280px;font-size:14px}
-
   .feed{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
   .rev{background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;transition:transform .28s,box-shadow .28s;cursor:pointer}
   .rev:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
@@ -118,7 +90,6 @@
   .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
   .pill{font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:5px 10px;border-radius:30px;background:color-mix(in srgb,var(--ink) 7%,transparent);color:var(--muted);border:1px solid var(--line)}
   .pill.hot{background:color-mix(in srgb,var(--primary) 16%,transparent);color:var(--primary);border-color:color-mix(in srgb,var(--primary) 32%,transparent)}
-
   .board{background:linear-gradient(120deg,var(--primary),var(--accent3));border-radius:24px;padding:34px 30px;position:relative;overflow:hidden}
   .board::after{content:var(--board-emoji,"🔥");position:absolute;right:-10px;bottom:-34px;font-size:160px;opacity:.14}
   .board h2{color:#fff;font-size:34px;margin-bottom:20px;text-transform:var(--tt)}
@@ -127,139 +98,15 @@
   .board-row .nm{flex:1;font-weight:800;font-size:17px}
   .board-row .ct{font-size:13px;opacity:.85;font-weight:600}
   .board-row .sc{font-family:var(--display);font-size:27px;background:var(--chip);color:var(--secondary);padding:4px 14px;border-radius:12px}
-
-  /* ---------- CREATOR APP ---------- */
-  .app-head{padding:40px 0 8px;text-align:center}
-  .app-head h2{font-size:clamp(34px,6vw,60px);color:var(--ink)}
-  .app-head h2 .ember{color:var(--primary)}
-  .app-head p{color:var(--faint);font-weight:700;margin-top:10px}
-  .app-grid{display:grid;grid-template-columns:1fr 360px;gap:34px;padding:28px 0 70px;align-items:start}
-  .panel{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:26px}
-  .panel h3{font-family:var(--display);font-size:21px;color:var(--ink);margin-bottom:20px;display:flex;align-items:center;gap:10px;text-transform:var(--tt)}
-  .panel h3 .dot{width:10px;height:10px;border-radius:50%;background:var(--primary)}
-  .field{margin-bottom:18px}
-  label{display:block;font-weight:800;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
-  input[type=text],textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;color:var(--ink);font-family:'Hanken Grotesk';font-size:14.5px;font-weight:500;padding:12px 14px;resize:none}
-  input[type=text]:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 18%,transparent)}
-  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .drop{border:2px dashed color-mix(in srgb,var(--ink) 25%,transparent);border-radius:16px;padding:28px;text-align:center;cursor:pointer;
-    background:repeating-linear-gradient(45deg,transparent,transparent 12px,color-mix(in srgb,var(--ink) 3%,transparent) 12px,color-mix(in srgb,var(--ink) 3%,transparent) 24px)}
-  .drop:hover{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 7%,transparent)}
-  .drop .ic{font-size:34px}
-  .drop b{display:block;margin-top:8px;color:var(--ink);font-size:14px}
-  .drop span{font-size:12px;color:var(--faint)}
-  .seg{display:flex;gap:8px}
-  .seg button{flex:1;background:var(--bg);border:1px solid var(--line);color:var(--muted);font-weight:800;font-size:13px;padding:11px;border-radius:12px;cursor:pointer;text-transform:uppercase;letter-spacing:.4px}
-  .seg button.on{background:var(--secondary);color:#1d120a;border-color:var(--secondary)}
-  .slider-wrap{display:flex;align-items:center;gap:16px}
-  input[type=range]{-webkit-appearance:none;flex:1;height:8px;border-radius:10px;background:linear-gradient(90deg,var(--primary),var(--secondary));outline:none}
-  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:4px solid var(--primary);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.4)}
-  .scoreout{font-family:var(--display);font-size:40px;color:var(--primary);width:80px;text-align:center;line-height:1}
-  .scoreout small{font-family:'Hanken Grotesk';font-weight:800;font-size:14px;color:var(--faint)}
-  .btns{display:flex;gap:12px;margin-top:6px;flex-wrap:wrap}
-  .btn{flex:1;min-width:130px;border:none;font-family:'Hanken Grotesk';font-weight:800;font-size:14px;padding:15px;border-radius:14px;cursor:pointer;transition:transform .2s,filter .2s;letter-spacing:.3px}
-  .btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--muted)}
-  .btn-ghost:hover{border-color:var(--ink);color:var(--ink)}
-  .btn-site{background:var(--primary);color:#fff;box-shadow:0 10px 24px -8px var(--primary)}
-  .btn-site:hover{transform:translateY(-2px)}
-  .btn-ig{background:linear-gradient(45deg,#F58529,#DD2A7B,#8134AF);color:#fff}
-  .btn-ig:hover{transform:translateY(-2px);filter:brightness(1.08)}
-
-  .preview-col{position:sticky;top:90px}
-  .preview-label{text-align:center;font-weight:800;font-size:11px;letter-spacing:2px;color:var(--faint);text-transform:uppercase;margin-bottom:14px}
-  .phone{background:#000;border-radius:34px;padding:10px;box-shadow:var(--shadow),0 0 0 2px var(--line)}
-  .ig{background:#fff;border-radius:26px;overflow:hidden;color:#111;font-size:13px}
-  .ig-top{display:flex;align-items:center;gap:9px;padding:11px 12px}
-  .ig-av{width:32px;height:32px;border-radius:50%;background:var(--badge);display:grid;place-items:center;font-family:var(--display);color:#1d120a;font-size:11px;box-shadow:0 0 0 2px #fff,0 0 0 4px #DD2A7B}
-  .ig-top b{font-size:13px;font-weight:700}
-  .ig-top span{display:block;font-size:11px;color:#888;font-weight:500}
-  .ig-top .dots{margin-left:auto;color:#333;font-weight:900;letter-spacing:1px}
-  .ig-img{position:relative;height:240px;display:grid;place-items:center;font-size:74px;background:linear-gradient(135deg,var(--surface2),var(--bg))}
-  .ig-img::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 25%,color-mix(in srgb,var(--primary) 40%,transparent),transparent 60%)}
-  .ig-img .emoji{position:relative;z-index:1}
-  .ig-seal{position:absolute;z-index:3;top:14px;right:14px;width:60px;height:60px;border-radius:50%;background:var(--badge);display:grid;place-items:center;color:#1d120a;transform:rotate(8deg);box-shadow:0 6px 16px rgba(0,0,0,.45)}
-  .ig-seal b{font-family:var(--display);font-size:22px;line-height:.8}
-  .ig-seal i{font-style:normal;font-weight:800;font-size:8px}
-  .ig-actions{display:flex;gap:15px;padding:10px 12px 4px;font-size:21px}
-  .ig-actions .save{margin-left:auto}
-  .ig-likes{padding:0 12px;font-weight:700;font-size:13px;color:#111}
-  .ig-cap{padding:6px 12px 14px;font-size:13px;line-height:1.45;white-space:pre-wrap;word-break:break-word;color:#111}
-  .ig-cap b{font-weight:700}
-  .ig-tags{color:#3a5a9b}
-  .charcount{text-align:right;font-size:11px;color:var(--faint);margin-top:6px;font-weight:700}
-
-  /* ---------- BRAND KIT ---------- */
-  .brand-head{padding:40px 0 6px;text-align:center}
-  .brand-head h2{font-size:clamp(34px,6vw,60px);color:var(--ink)}
-  .brand-head h2 .gold{color:var(--primary)}
-  .brand-head p{color:var(--faint);font-weight:700;margin-top:8px}
-  .kit{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:24px 0 24px}
-  .kit-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:28px}
-  .kit-card.full{grid-column:1/-1}
-  .worldtag{display:inline-block;font-weight:800;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;border-radius:30px;margin-bottom:22px}
-  .worldtag.b{background:#FFE9C7;color:#E8402C}
-  .worldtag.q{background:#2E1F16;color:#F4A81E}
-  .logo-lockup{display:flex;align-items:center;gap:16px;margin-bottom:14px}
-  .lk-badge{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;box-shadow:0 8px 20px rgba(0,0,0,.25)}
-  .lk-badge.b{background:radial-gradient(circle at 30% 25%,#FFD23F,#FBB829 48%,#E8402C)}
-  .lk-badge.q{background:radial-gradient(circle at 30% 25%,#F4A81E,#EA5318 55%,#B22D17)}
-  .lk-badge span{font-size:30px;color:#1d120a}
-  .lk-word{line-height:.84;color:var(--ink)}
-  .lk-word small{display:block;font-family:'Hanken Grotesk';font-weight:800;font-size:9px;letter-spacing:3px;margin-top:6px}
-  .lk-word.b{font-family:'Lilita One';font-size:30px}
-  .lk-word.b small{color:#E8402C}
-  .lk-word.q{font-family:'Anton';font-size:30px}
-  .lk-word.q small{color:#F4A81E}
-
-  .swatches{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
-  .sw{border-radius:12px;overflow:hidden;border:1px solid var(--line)}
-  .sw .chip2{height:54px}
-  .sw .meta{padding:8px 9px}
-  .sw .meta b{display:block;font-weight:800;font-size:11px;color:var(--ink)}
-  .sw .meta code{font-size:10px;color:var(--faint);font-family:'Hanken Grotesk';font-weight:700}
-
-  .typesample{margin-top:18px}
-  .typesample .ts{font-size:34px;line-height:1;color:var(--ink)}
-  .typesample .ts.b{font-family:'Lilita One'}
-  .typesample .ts.q{font-family:'Anton';text-transform:uppercase}
-  .typesample .tl{font-size:10.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);margin-bottom:8px}
-
-  .taglines{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
-  .tline{border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-family:var(--display);font-size:17px;color:var(--ink);text-transform:var(--tt)}
-  .tline.lead{color:#fff;border:none}
-  .tline.lead.b{background:linear-gradient(120deg,#E8402C,#FBB829);font-family:'Lilita One'}
-  .tline.lead.q{background:linear-gradient(120deg,#B22D17,#EA5318);font-family:'Anton';text-transform:uppercase}
-
-  .shared{display:flex;gap:30px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-  .shared .blk{flex:1;min-width:240px}
-  .body-sample{font-family:'Hanken Grotesk';font-size:16px;color:var(--muted);line-height:1.5;max-width:520px}
-  .script-sample{font-family:'Caveat';font-size:30px;color:var(--secondary)}
-  .howto{color:var(--muted);font-size:14px;line-height:1.6}
-  .howto b{color:var(--ink)}
-
   footer{border-top:1px solid var(--line);padding:34px 0;text-align:center;color:var(--faint);font-size:13px;font-weight:700}
   footer .scribble{color:var(--primary);font-size:20px;display:block;margin-bottom:8px}
-
-  @media(max-width:900px){
-    .hero-grid{grid-template-columns:1fr}
-    .feed{grid-template-columns:repeat(2,1fr)}
-    .app-grid{grid-template-columns:1fr}
-    .preview-col{position:static;max-width:340px;margin:0 auto}
-    .kit{grid-template-columns:1fr}
-    .stamp{display:none}
-  }
-  @media(max-width:560px){
-    .nav{justify-content:center}
-    .feed{grid-template-columns:1fr}
-    .swatches{grid-template-columns:repeat(3,1fr)}
-  }
+  @media(max-width:900px){.hero-grid{grid-template-columns:1fr}.feed{grid-template-columns:repeat(2,1fr)}.stamp{display:none}}
+  @media(max-width:560px){.nav{justify-content:center}.feed{grid-template-columns:1fr}}
 </style>
 </head>
 <body data-theme="burger">
-
-<!-- ============ NAV ============ -->
 <nav class="nav">
-  <div class="brand" onclick="show('site')">
+  <div class="brand">
     <div class="badge"><span>B&amp;B</span></div>
     <div class="wordmark">Burgers<br>&amp; Brisket<small id="sub">SMASH · STACK · SCORE</small></div>
   </div>
@@ -267,15 +114,8 @@
     <button class="world-btn on" data-w="burger" onclick="setWorld('burger')">🍔 Burgers</button>
     <button class="world-btn" data-w="bbq" onclick="setWorld('bbq')">🍖 Brisket &amp; BBQ</button>
   </div>
-  <div class="tabs">
-    <button class="tab active" data-t="site" onclick="show('site')">Reviews</button>
-    <button class="tab" data-t="app" onclick="show('app')">Creator</button>
-    <button class="tab" data-t="brand" onclick="show('brand')">Brand</button>
-  </div>
 </nav>
-
-<!-- ============ PUBLIC SITE ============ -->
-<section id="site" class="screen active">
+<section id="site">
   <div class="stamp scribble">10/10<small>RARE BIRD</small></div>
   <div class="hero">
     <div class="wrap hero-grid">
@@ -298,205 +138,40 @@
       </div>
     </div>
   </div>
-
   <div class="wrap" id="latest">
     <div class="sec">
-      <div class="sec-head">
-        <h2 id="feed-title"></h2>
-        <p id="feed-sub"></p>
-      </div>
+      <div class="sec-head"><h2 id="feed-title"></h2><p id="feed-sub"></p></div>
       <div class="feed" id="feed"></div>
     </div>
     <div class="sec" style="padding-top:0">
-      <div class="board" id="board">
-        <h2 id="board-title"></h2>
-        <div id="board-rows"></div>
-      </div>
+      <div class="board" id="board"><h2 id="board-title"></h2><div id="board-rows"></div></div>
     </div>
   </div>
 </section>
-
-<!-- ============ CREATOR APP ============ -->
-<section id="app" class="screen">
-  <div class="wrap">
-    <div class="app-head">
-      <h2>The <span class="ember">Creator</span> Console</h2>
-      <p>Drop a review once → publish to the site and Instagram in one go. It posts to whichever world you're in.</p>
-    </div>
-    <div class="app-grid">
-      <div class="panel">
-        <h3><span class="dot"></span> New Review</h3>
-        <div class="field">
-          <label>Cover Photo</label>
-          <div class="drop"><div class="ic">📸</div><b>Drag a shot here or tap to upload</b><span>JPG / PNG / Reel cover · up to 20MB</span></div>
-        </div>
-        <div class="row2">
-          <div class="field"><label>Spot Name</label><input type="text" id="f-spot" value="Patty Wagon" oninput="sync()"></div>
-          <div class="field"><label>City</label><input type="text" id="f-city" value="Austin, TX" oninput="sync()"></div>
-        </div>
-        <div class="field">
-          <label>Category</label>
-          <div class="seg" id="seg">
-            <button class="on" data-c="Burger" onclick="setCat(this)">🍔 Burger</button>
-            <button data-c="Brisket" onclick="setCat(this)">🥩 Brisket</button>
-            <button data-c="Both" onclick="setCat(this)">🔥 Both</button>
-          </div>
-        </div>
-        <div class="field">
-          <label>The Score</label>
-          <div class="slider-wrap">
-            <input type="range" id="f-score" min="0" max="10" step="0.1" value="9.4" oninput="sync()">
-            <div class="scoreout"><span id="scoreVal">9.4</span><small>/10</small></div>
-          </div>
-        </div>
-        <div class="field"><label>One-Line Verdict</label><input type="text" id="f-verdict" value="Lacy crisp edges, cheese in every crevice." oninput="sync()"></div>
-        <div class="field"><label>Full Notes (site only)</label><textarea id="f-notes" rows="3" oninput="sync()">Smashed thin, edges shattering-crisp, American cheese in every crevice, bun toasted in beef fat. The platonic smash. Go hungry.</textarea></div>
-        <div class="btns">
-          <button class="btn btn-ghost" onclick="toast('Draft saved 📝')">Save Draft</button>
-          <button class="btn btn-site" onclick="toast('Published to site ✅')">Publish to Site</button>
-          <button class="btn btn-ig" onclick="toast('Pushed to Instagram 📲')">Push to Instagram</button>
-        </div>
-      </div>
-
-      <div class="preview-col">
-        <div class="preview-label">Live Instagram Preview</div>
-        <div class="phone">
-          <div class="ig">
-            <div class="ig-top">
-              <div class="ig-av">B&amp;B</div>
-              <div><b>burgersandbrisket</b><span id="ig-loc">Austin, TX</span></div>
-              <div class="dots">•••</div>
-            </div>
-            <div class="ig-img"><span class="emoji" id="ig-emoji">🍔</span>
-              <div class="ig-seal"><div><b id="ig-score">9.4</b><i>/10</i></div></div>
-            </div>
-            <div class="ig-actions"><span>🤍</span><span>💬</span><span>📤</span><span class="save">🔖</span></div>
-            <div class="ig-likes">1,204 likes</div>
-            <div class="ig-cap"><b>burgersandbrisket</b> <span id="ig-cap"></span></div>
-          </div>
-        </div>
-        <div class="charcount"><span id="cc">0</span> / 2,200 characters</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ BRAND KIT ============ -->
-<section id="brand" class="screen">
-  <div class="wrap">
-    <div class="brand-head"><h2>The <span class="gold">Brand</span> System</h2><p>One name, two worlds — flip the toggle up top to watch the whole site re-skin.</p></div>
-    <div class="kit">
-      <!-- BURGER WORLD -->
-      <div class="kit-card">
-        <span class="worldtag b">🍔 Burger World — "Drive-Thru Pop"</span>
-        <div class="logo-lockup">
-          <div class="lk-badge b"><span style="font-family:'Lilita One'">B&amp;B</span></div>
-          <div class="lk-word b">Burgers<br>&amp; Brisket<small>SMASH · STACK · SCORE</small></div>
-        </div>
-        <div class="swatches">
-          <div class="sw"><div class="chip2" style="background:#FFF3DD"></div><div class="meta"><b>Cream</b><code>#FFF3DD</code></div></div>
-          <div class="sw"><div class="chip2" style="background:#E8402C"></div><div class="meta"><b>Ketchup</b><code>#E8402C</code></div></div>
-          <div class="sw"><div class="chip2" style="background:#FBB829"></div><div class="meta"><b>Mustard</b><code>#FBB829</code></div></div>
-          <div class="sw"><div class="chip2" style="background:#FFD23F"></div><div class="meta"><b>Cheese</b><code>#FFD23F</code></div></div>
-          <div class="sw"><div class="chip2" style="background:#3FA64C"></div><div class="meta"><b>Pickle</b><code>#3FA64C</code></div></div>
-          <div class="sw"><div class="chip2" style="background:#2A1206"></div><div class="meta"><b>Cocoa Ink</b><code>#2A1206</code></div></div>
-        </div>
-        <div class="typesample"><div class="tl">Display — Lilita One</div><div class="ts b">Smash. Stack. Score.</div></div>
-        <div class="taglines"><span class="tline lead b">Smash. Stack. Score.</span><span class="tline" style="font-family:'Lilita One';text-transform:none">Two buns, one number.</span><span class="tline" style="font-family:'Lilita One';text-transform:none">Hold the mercy.</span></div>
-      </div>
-
-      <!-- BBQ WORLD -->
-      <div class="kit-card" style="background:#22160F;border-color:rgba(248,238,220,.12)">
-        <span class="worldtag q">🍖 BBQ World — "Pit &amp; Ember"</span>
-        <div class="logo-lockup">
-          <div class="lk-badge q"><span style="font-family:'Anton'">B&amp;B</span></div>
-          <div class="lk-word q" style="color:#F8EEDC">Burgers<br>&amp; Brisket<small>SMOKE · SEAR · SCORE</small></div>
-        </div>
-        <div class="swatches">
-          <div class="sw" style="border-color:rgba(248,238,220,.14)"><div class="chip2" style="background:#160F0C"></div><div class="meta"><b style="color:#F8EEDC">Charcoal</b><code style="color:#8A7868">#160F0C</code></div></div>
-          <div class="sw" style="border-color:rgba(248,238,220,.14)"><div class="chip2" style="background:#B22D17"></div><div class="meta"><b style="color:#F8EEDC">Brisket</b><code style="color:#8A7868">#B22D17</code></div></div>
-          <div class="sw" style="border-color:rgba(248,238,220,.14)"><div class="chip2" style="background:#EA5318"></div><div class="meta"><b style="color:#F8EEDC">Ember</b><code style="color:#8A7868">#EA5318</code></div></div>
-          <div class="sw" style="border-color:rgba(248,238,220,.14)"><div class="chip2" style="background:#F4A81E"></div><div class="meta"><b style="color:#F8EEDC">Mustard</b><code style="color:#8A7868">#F4A81E</code></div></div>
-          <div class="sw" style="border-color:rgba(248,238,220,.14)"><div class="chip2" style="background:#F8EEDC"></div><div class="meta"><b style="color:#F8EEDC">Bun Cream</b><code style="color:#8A7868">#F8EEDC</code></div></div>
-          <div class="sw" style="border-color:rgba(248,238,220,.14)"><div class="chip2" style="background:#8A7868"></div><div class="meta"><b style="color:#F8EEDC">Ash</b><code style="color:#8A7868">#8A7868</code></div></div>
-        </div>
-        <div class="typesample"><div class="tl" style="color:#EA5318">Display — Anton</div><div class="ts q" style="color:#F8EEDC">Smoke. Sear. Score.</div></div>
-        <div class="taglines"><span class="tline lead q">Smoke. Sear. Score.</span><span class="tline" style="font-family:'Anton';text-transform:uppercase;color:#F8EEDC;border-color:rgba(248,238,220,.18)">Two meats, one number.</span><span class="tline" style="font-family:'Anton';text-transform:uppercase;color:#F8EEDC;border-color:rgba(248,238,220,.18)">If it's got bark, it gets a mark.</span></div>
-      </div>
-
-      <!-- SHARED -->
-      <div class="kit-card full">
-        <span class="worldtag" style="background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink)">Shared across both worlds</span>
-        <div class="shared">
-          <div class="blk"><div class="tl" style="font-size:10.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);margin-bottom:8px">Body — Hanken Grotesk</div><p class="body-sample">Punchy, honest reviews with a number you can trust. The same clean voice carries verdicts, captions and the long notes nobody else bothers to write — only the colors and the energy change.</p></div>
-          <div class="blk"><div class="tl" style="font-size:10.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);margin-bottom:8px">Accent — Caveat</div><div class="script-sample">fresh off the grill, baby 🔥</div></div>
-          <div class="blk"><div class="tl" style="font-size:10.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);margin-bottom:8px">How the switch works</div><p class="howto">One monogram, one wordmark. <b>Burger world</b> goes light, rounded and poppy; <b>BBQ world</b> goes dark, condensed and smoky. The badge gradient, fonts and textures all swap on toggle.</p></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <span class="scribble">fresh off the grill 🔥</span>
-  Burgers &amp; Brisket © 2026 · burgersandbrisket.com · @burgersandbrisket
-</footer>
-
-<div id="toast" style="position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--secondary);color:#1d120a;font-weight:800;padding:14px 24px;border-radius:50px;box-shadow:var(--shadow);z-index:200;transition:transform .35s;font-size:14px">Saved</div>
-
+<footer><span class="scribble">fresh off the grill 🔥</span>Burgers &amp; Brisket © 2026 · burgersandbrisket.com · @burgersandbrisket</footer>
 <script>
   const worlds={
-    burger:{
-      sub:'SMASH · STACK · SCORE',
-      eyebrow:'The juiciest burgers, ranked without mercy',
-      h1:['Smash.','Stack.','Score.'],
+    burger:{sub:'SMASH · STACK · SCORE',eyebrow:'The juiciest burgers, ranked without mercy',h1:['Smash.','Stack.','Score.'],
       lede:"Two buns, one number. We hunt down every smash, stack and griddled patty in town and tell you exactly how it eats.",
       ft:{emoji:'🍔',score:'9.4',kicker:'⭐ Burger of the week',name:'The Smash Hit',place:'Patty Wagon · Austin, TX',verdict:"Lacy crisp edges, cheese in every crevice, bun toasted in beef fat. <b>The platonic smash.</b> Go hungry."},
-      feedTitle:'Latest <span class="gold">drops</span> 🍔', feedSub:'Fresh off the griddle. Updated whenever we get hungry.',
-      feed:[
-        {e:'🍔',n:'Patty Wagon',c:'Double Smash · Austin',s:'9.4',t:['🍔 Smash','Crispy Edges'],hot:1},
-        {e:'🍔',n:'Griddle Me This',c:'Bacon Stack · Nashville',s:'9.1',t:['🍔 Stack','Messy (good)'],hot:1},
-        {e:'🧀',n:'Cheese Lords',c:'Quad Cheese · Chicago',s:'8.9',t:['🍔 Smash','Cheese Pull']},
-        {e:'🍔',n:'Bun Intended',c:'Classic Single · Portland',s:'8.6',t:['🍔 Classic','Solid Lunch']},
-        {e:'🥓',n:'Hog Heaven',c:'Bacon Bomb · Memphis',s:'8.4',t:['🍔 Stack','Pile It On']},
-        {e:'🍔',n:'Corner Griddle',c:'Diner Smash · Denver',s:'7.8',t:['🍔 Smash','Old School']},
-      ],
-      boardTitle:'The Juicy Board 🍔', boardEmoji:'"🍔"',
-      board:[['Patty Wagon','Double Smash · Austin','9.4'],['Griddle Me This','Bacon Stack · Nashville','9.1'],['Cheese Lords','Quad Cheese · Chicago','8.9'],['Bun Intended','Classic · Portland','8.6']]
-    },
-    bbq:{
-      sub:'SMOKE · SEAR · SCORE',
-      eyebrow:'The realest BBQ reviews on the internet',
-      h1:['Smoke.','Sear.','Score.'],
+      feedTitle:'Latest <span class="gold">drops</span> 🍔',feedSub:'Fresh off the griddle. Updated whenever we get hungry.',
+      feed:[{e:'🍔',n:'Patty Wagon',c:'Double Smash · Austin',s:'9.4',t:['🍔 Smash','Crispy Edges'],hot:1},{e:'🍔',n:'Griddle Me This',c:'Bacon Stack · Nashville',s:'9.1',t:['🍔 Stack','Messy (good)'],hot:1},{e:'🧀',n:'Cheese Lords',c:'Quad Cheese · Chicago',s:'8.9',t:['🍔 Smash','Cheese Pull']},{e:'🍔',n:'Bun Intended',c:'Classic Single · Portland',s:'8.6',t:['🍔 Classic','Solid Lunch']},{e:'🥓',n:'Hog Heaven',c:'Bacon Bomb · Memphis',s:'8.4',t:['🍔 Stack','Pile It On']},{e:'🍔',n:'Corner Griddle',c:'Diner Smash · Denver',s:'7.8',t:['🍔 Smash','Old School']}],
+      boardTitle:'The Juicy Board 🍔',boardEmoji:'"🍔"',
+      board:[['Patty Wagon','Double Smash · Austin','9.4'],['Griddle Me This','Bacon Stack · Nashville','9.1'],['Cheese Lords','Quad Cheese · Chicago','8.9'],['Bun Intended','Classic · Portland','8.6']]},
+    bbq:{sub:'SMOKE · SEAR · SCORE',eyebrow:'The realest BBQ reviews on the internet',h1:['Smoke.','Sear.','Score.'],
       lede:"Low and slow, no shortcuts. We bite into every brisket, rib and burnt end in town and slap a number on it — no notes, no nonsense.",
       ft:{emoji:'🥩',score:'9.6',kicker:'⭐ Cook of the week',name:'The Char Baron',place:'Smokestack 47 · Austin, TX',verdict:"14-hour bark, a smoke ring you could set a watch to. <b>Best brisket in the city</b> and it's not close."},
-      feedTitle:'Latest <span class="gold">drops</span> 🔥', feedSub:'Low and slow. Updated whenever the smoker cools down.',
-      feed:[
-        {e:'🥩',n:'Smokestack 47',c:'Brisket · Austin',s:'9.6',t:['🔥 Brisket','Top 3 Ever'],hot:1},
-        {e:'🍖',n:'Low & Slow BBQ',c:'Burnt Ends · Kansas City',s:'9.3',t:['🥩 Brisket','Bark King'],hot:1},
-        {e:'🍖',n:'Ember & Oak',c:'Beef Ribs · Nashville',s:'9.1',t:['🍖 Ribs','Off The Bone']},
-        {e:'🥩',n:'Pit Boss Pete',c:'Combo Plate · Memphis',s:'8.8',t:['🔥 Combo','Worth The Drive']},
-        {e:'🌭',n:'Sausage Saloon',c:'Hot Links · San Antonio',s:'8.5',t:['🌭 Links','Real Snap']},
-        {e:'🍖',n:'The Bark Side',c:'Pulled Pork · Lockhart',s:'8.2',t:['🍖 Pork','Saucy']},
-      ],
-      boardTitle:'The Hot Board 🔥', boardEmoji:'"🔥"',
-      board:[['Smokestack 47','Brisket · Austin','9.6'],['Low & Slow BBQ','Burnt Ends · KC','9.3'],['Ember & Oak','Beef Ribs · Nashville','9.1'],['Pit Boss Pete','Combo · Memphis','8.8']]
-    }
+      feedTitle:'Latest <span class="gold">drops</span> 🔥',feedSub:'Low and slow. Updated whenever the smoker cools down.',
+      feed:[{e:'🥩',n:'Smokestack 47',c:'Brisket · Austin',s:'9.6',t:['🔥 Brisket','Top 3 Ever'],hot:1},{e:'🍖',n:'Low & Slow BBQ',c:'Burnt Ends · Kansas City',s:'9.3',t:['🥩 Brisket','Bark King'],hot:1},{e:'🍖',n:'Ember & Oak',c:'Beef Ribs · Nashville',s:'9.1',t:['🍖 Ribs','Off The Bone']},{e:'🥩',n:'Pit Boss Pete',c:'Combo Plate · Memphis',s:'8.8',t:['🔥 Combo','Worth The Drive']},{e:'🌭',n:'Sausage Saloon',c:'Hot Links · San Antonio',s:'8.5',t:['🌭 Links','Real Snap']},{e:'🍖',n:'The Bark Side',c:'Pulled Pork · Lockhart',s:'8.2',t:['🍖 Pork','Saucy']}],
+      boardTitle:'The Hot Board 🔥',boardEmoji:'"🔥"',
+      board:[['Smokestack 47','Brisket · Austin','9.6'],['Low & Slow BBQ','Burnt Ends · KC','9.3'],['Ember & Oak','Beef Ribs · Nashville','9.1'],['Pit Boss Pete','Combo · Memphis','8.8']]}
   };
-
   let world='burger';
-
   function setWorld(w){
-    world=w;
-    document.body.dataset.theme=w;
+    world=w;document.body.dataset.theme=w;
     document.querySelectorAll('.world-btn').forEach(b=>b.classList.toggle('on',b.dataset.w===w));
-    document.getElementById('sub').textContent=worlds[w].sub;
-    renderSite();
-    const c=w==='burger'?'Burger':'Brisket';
-    document.querySelectorAll('#seg button').forEach(x=>x.classList.toggle('on',x.dataset.c===c));
-    cat=c; sync();
+    document.getElementById('sub').textContent=worlds[w].sub;renderSite();
   }
-
   function renderSite(){
     const w=worlds[world];
     document.getElementById('eyebrow').textContent=w.eyebrow;
@@ -510,53 +185,11 @@
     document.getElementById('ft-verdict').innerHTML=w.ft.verdict;
     document.getElementById('feed-title').innerHTML=w.feedTitle;
     document.getElementById('feed-sub').textContent=w.feedSub;
-    document.getElementById('feed').innerHTML=w.feed.map(r=>`
-      <div class="rev">
-        <div class="ph"><span class="emoji">${r.e}</span>
-          <div class="score-seal"><div><b>${r.s}</b><i>/10</i></div></div>
-        </div>
-        <div class="rev-body">
-          <h4>${r.n}</h4>
-          <div class="place">📍 ${r.c}</div>
-          <div class="tags">${r.t.map((t,i)=>`<span class="pill ${i===0&&r.hot?'hot':''}">${t}</span>`).join('')}</div>
-        </div>
-      </div>`).join('');
+    document.getElementById('feed').innerHTML=w.feed.map(r=>`<div class="rev"><div class="ph"><span class="emoji">${r.e}</span><div class="score-seal"><div><b>${r.s}</b><i>/10</i></div></div></div><div class="rev-body"><h4>${r.n}</h4><div class="place">📍 ${r.c}</div><div class="tags">${r.t.map((t,i)=>`<span class="pill ${i===0&&r.hot?'hot':''}">${t}</span>`).join('')}</div></div></div>`).join('');
     document.getElementById('board').style.setProperty('--board-emoji',w.boardEmoji);
     document.getElementById('board-title').textContent=w.boardTitle;
-    document.getElementById('board-rows').innerHTML=w.board.map((r,i)=>`
-      <div class="board-row"><span class="rank">${String(i+1).padStart(2,'0')}</span>
-      <div class="nm">${r[0]}<span class="ct">${r[1]}</span></div><span class="sc">${r[2]}</span></div>`).join('');
+    document.getElementById('board-rows').innerHTML=w.board.map((r,i)=>`<div class="board-row"><span class="rank">${String(i+1).padStart(2,'0')}</span><div class="nm">${r[0]}<span class="ct">${r[1]}</span></div><span class="sc">${r[2]}</span></div>`).join('');
   }
-
-  function show(id){
-    document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));
-    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.t===id));
-    window.scrollTo({top:0,behavior:'smooth'});
-  }
-
-  // creator app
-  let cat='Burger';
-  const emojiMap={Burger:'🍔',Brisket:'🥩',Both:'🔥'};
-  function setCat(b){document.querySelectorAll('#seg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');cat=b.dataset.c;sync();}
-  function sync(){
-    const spot=document.getElementById('f-spot').value||'Your Spot';
-    const city=document.getElementById('f-city').value||'';
-    const score=parseFloat(document.getElementById('f-score').value).toFixed(1);
-    const verdict=document.getElementById('f-verdict').value||'';
-    document.getElementById('scoreVal').textContent=score;
-    document.getElementById('ig-score').textContent=score;
-    document.getElementById('ig-loc').textContent=city||'Location';
-    document.getElementById('ig-emoji').textContent=emojiMap[cat];
-    const tag=cat.toLowerCase();
-    const cap=`${verdict}\n\n📍 ${spot}${city?' · '+city:''}\n🔥 Score: ${score}/10\n\n`;
-    const tags=`#burgersandbrisket #${tag} #bbq #burgerreview #brisket #foodie #eeeeeats`;
-    document.getElementById('ig-cap').innerHTML=cap.replace(/\n/g,'<br>')+`<span class="ig-tags">${tags}</span>`;
-    document.getElementById('cc').textContent=(cap+tags).length;
-  }
-
-  let tt;
-  function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.transform='translateX(-50%) translateY(0)';clearTimeout(tt);tt=setTimeout(()=>el.style.transform='translateX(-50%) translateY(120px)',2200);}
-
   setWorld('burger');
 </script>
 </body>
