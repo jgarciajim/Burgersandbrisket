@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>B&B Studio — Private</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Lilita+One&family=Hanken+Grotesk:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  body[data-theme="bbq"]{
+    --bg:#160F0C;--surface:#22160F;--surface2:#2E1F16;--chip:#160F0C;
+    --ink:#F8EEDC;--muted:#C9B7A2;--faint:#8A7868;
+    --primary:#EA5318;--secondary:#F4A81E;--accent3:#B22D17;
+    --line:rgba(248,238,220,.12);--display:'Anton',sans-serif;--tt:uppercase;--ls:.5px;
+    --badge:radial-gradient(circle at 30% 25%,#F4A81E,#EA5318 55%,#B22D17);
+    --shadow:0 24px 60px -18px rgba(0,0,0,.7);
+  }
+  body[data-theme="burger"]{
+    --bg:#FFF3DD;--surface:#FFFFFF;--surface2:#FFE9C7;--chip:#2A1206;
+    --ink:#2A1206;--muted:#8A6240;--faint:#BC9970;
+    --primary:#E8402C;--secondary:#FBB829;--accent3:#3FA64C;
+    --line:rgba(42,18,6,.13);--display:'Lilita One',cursive;--tt:none;--ls:.3px;
+    --badge:radial-gradient(circle at 30% 25%,#FFD23F,#FBB829 48%,#E8402C);
+    --shadow:0 22px 48px -20px rgba(232,64,44,.42);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  *{transition:background-color .45s ease,border-color .45s ease,color .3s ease,fill .45s ease}
+  body{font-family:'Hanken Grotesk',sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+  h2,h3{font-family:var(--display);font-weight:400;letter-spacing:var(--ls);line-height:.94;text-transform:var(--tt)}
+  ::selection{background:var(--primary);color:#fff}
+
+  /* ---- LOGIN GATE ---- */
+  .gate{position:fixed;inset:0;z-index:1000;background:var(--bg);display:grid;place-items:center;padding:24px}
+  .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:40px 32px;max-width:380px;width:100%;text-align:center;box-shadow:var(--shadow)}
+  .gate .badge{width:64px;height:64px;margin:0 auto 20px}
+  .gate .badge span{font-size:26px}
+  .gate h2{font-size:30px;color:var(--ink)}
+  .gate p{color:var(--muted);font-size:14px;margin:8px 0 22px;line-height:1.45}
+  .gate input{width:100%;text-align:center;background:var(--bg);border:1px solid var(--line);border-radius:12px;color:var(--ink);font-family:'Hanken Grotesk';font-size:16px;font-weight:600;padding:13px 14px;letter-spacing:1px}
+  .gate input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 18%,transparent)}
+  .gate .err{color:var(--primary);font-size:13px;font-weight:700;margin-top:12px;min-height:18px}
+  .shake{animation:shake .4s}
+  @keyframes shake{0%,100%{transform:none}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+  .badge{width:46px;height:46px;border-radius:50%;flex:0 0 auto;background:var(--badge);display:grid;place-items:center;box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--secondary),0 8px 20px rgba(0,0,0,.3)}
+  .badge span{font-family:var(--display);font-size:18px;color:#1d120a;letter-spacing:-1px}
+  .nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:13px 22px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .wordmark{font-family:var(--display);font-size:20px;letter-spacing:.4px;line-height:.86;color:var(--ink);text-transform:none}
+  .wordmark small{display:block;font-family:'Hanken Grotesk';font-weight:800;font-size:8px;letter-spacing:2.6px;color:var(--primary);margin-top:4px}
+  .private-chip{font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);border:1px solid var(--line);border-radius:30px;padding:4px 9px;margin-left:4px}
+  .world-toggle{display:flex;gap:5px;background:var(--surface);padding:5px;border-radius:50px;border:1px solid var(--line);box-shadow:var(--shadow)}
+  .world-btn{border:none;background:none;color:var(--muted);font-weight:800;font-size:13px;padding:10px 16px;border-radius:40px;cursor:pointer;white-space:nowrap}
+  .world-btn.on{background:var(--primary);color:#fff;box-shadow:0 6px 16px -4px var(--primary)}
+  .tabs{display:flex;gap:4px;background:var(--surface);padding:4px;border-radius:40px;border:1px solid var(--line)}
+  .tab{border:none;background:none;color:var(--muted);font-weight:800;font-size:11.5px;letter-spacing:.4px;text-transform:uppercase;padding:9px 14px;border-radius:30px;cursor:pointer}
+  .tab.active{background:var(--ink);color:var(--bg)}
+  .viewsite{color:var(--muted);font-weight:800;font-size:12px;text-decoration:none}
+  .viewsite:hover{color:var(--primary)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+  .screen{display:none;animation:fade .4s ease}
+  .screen.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  .app-head{padding:38px 0 8px;text-align:center}
+  .app-head h2{font-size:clamp(32px,6vw,54px);color:var(--ink)}
+  .app-head h2 .ember{color:var(--primary)}
+  .app-head p{color:var(--faint);font-weight:700;margin-top:10px}
+  .app-grid{display:grid;grid-template-columns:1fr 360px;gap:34px;padding:28px 0 70px;align-items:start}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:26px}
+  .panel h3{font-size:21px;color:var(--ink);margin-bottom:20px;display:flex;align-items:center;gap:10px;text-transform:var(--tt)}
+  .panel h3 .dot{width:10px;height:10px;border-radius:50%;background:var(--primary)}
+  .field{margin-bottom:18px}
+  label{display:block;font-weight:800;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+  input[type=text],textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;color:var(--ink);font-family:'Hanken Grotesk';font-size:14.5px;font-weight:500;padding:12px 14px;resize:none}
+  input[type=text]:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 18%,transparent)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .drop{border:2px dashed color-mix(in srgb,var(--ink) 25%,transparent);border-radius:16px;padding:24px;text-align:center;cursor:pointer;background:repeating-linear-gradient(45deg,transparent,transparent 12px,color-mix(in srgb,var(--ink) 3%,transparent) 12px,color-mix(in srgb,var(--ink) 3%,transparent) 24px)}
+  .drop.has{padding:0;border-style:solid;border-color:var(--primary);overflow:hidden}
+  .drop:hover{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 7%,transparent)}
+  .drop .ic{font-size:32px}
+  .drop b{display:block;margin-top:8px;color:var(--ink);font-size:14px}
+  .drop span{font-size:12px;color:var(--faint)}
+  .drop img{display:block;width:100%;height:190px;object-fit:cover}
+  .seg{display:flex;gap:8px}
+  .seg button{flex:1;background:var(--bg);border:1px solid var(--line);color:var(--muted);font-weight:800;font-size:13px;padding:11px;border-radius:12px;cursor:pointer;text-transform:uppercase;letter-spacing:.4px}
+  .seg button.on{background:var(--secondary);color:#1d120a;border-color:var(--secondary)}
+  .slider-wrap{display:flex;align-items:center;gap:16px}
+  input[type=range]{-webkit-appearance:none;flex:1;height:8px;border-radius:10px;background:linear-gradient(90deg,var(--primary),var(--secondary));outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:4px solid var(--primary);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+  .scoreout{font-family:var(--display);font-size:40px;color:var(--primary);width:80px;text-align:center;line-height:1}
+  .scoreout small{font-family:'Hanken Grotesk';font-weight:800;font-size:14px;color:var(--faint)}
+  .btns{display:flex;gap:12px;margin-top:6px;flex-wrap:wrap}
+  .btn{flex:1;min-width:130px;border:none;font-family:'Hanken Grotesk';font-weight:800;font-size:14px;padding:15px;border-radius:14px;cursor:pointer;transition:transform .2s,filter .2s;letter-spacing:.3px}
+  .btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--muted)}
+  .btn-ghost:hover{border-color:var(--ink);color:var(--ink)}
+  .btn-site{background:var(--primary);color:#fff;box-shadow:0 10px 24px -8px var(--primary)}
+  .btn-site:hover{transform:translateY(-2px)}
+  .btn-ig{background:linear-gradient(45deg,#F58529,#DD2A7B,#8134AF);color:#fff}
+  .btn-ig:hover{transform:translateY(-2px);filter:brightness(1.08)}
+  .preview-col{position:sticky;top:90px}
+  .preview-label{text-align:center;font-weight:800;font-size:11px;letter-spacing:2px;color:var(--faint);text-transform:uppercase;margin-bottom:14px}
+  .phone{background:#000;border-radius:34px;padding:10px;box-shadow:var(--shadow),0 0 0 2px var(--line)}
+  .ig{background:#fff;border-radius:26px;overflow:hidden;color:#111;font-size:13px}
+  .ig-top{display:flex;align-items:center;gap:9px;padding:11px 12px}
+  .ig-av{width:32px;height:32px;border-radius:50%;background:var(--badge);display:grid;place-items:center;font-family:var(--display);color:#1d120a;font-size:11px;box-shadow:0 0 0 2px #fff,0 0 0 4px #DD2A7B}
+  .ig-top b{font-size:13px;font-weight:700}
+  .ig-top span{display:block;font-size:11px;color:#888;font-weight:500}
+  .ig-top .dots{margin-left:auto;color:#333;font-weight:900;letter-spacing:1px}
+  .ig-img{position:relative;height:240px;display:grid;place-items:center;font-size:74px;background:linear-gradient(135deg,var(--surface2),var(--bg));overflow:hidden}
+  .ig-img::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 25%,color-mix(in srgb,var(--primary) 40%,transparent),transparent 60%)}
+  .ig-img .emoji{position:relative;z-index:1}
+  .ig-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
+  .ig-seal{position:absolute;z-index:3;top:14px;right:14px;width:60px;height:60px;border-radius:50%;background:var(--badge);display:grid;place-items:center;color:#1d120a;transform:rotate(8deg);box-shadow:0 6px 16px rgba(0,0,0,.45)}
+  .ig-seal b{font-family:var(--display);font-size:22px;line-height:.8}
+  .ig-seal i{font-style:normal;font-weight:800;font-size:8px}
+  .ig-actions{display:flex;gap:15px;padding:10px 12px 4px;font-size:21px}
+  .ig-actions .save{margin-left:auto}
+  .ig-likes{padding:0 12px;font-weight:700;font-size:13px;color:#111}
+  .ig-cap{padding:6px 12px 14px;font-size:13px;line-height:1.45;white-space:pre-wrap;word-break:break-word;color:#111}
+  .ig-cap b{font-weight:700}
+  .ig-tags{color:#3a5a9b}
+  .charcount{text-align:right;font-size:11px;color:var(--faint);margin-top:6px;font-weight:700}
+
+  .brand-head{padding:38px 0 6px;text-align:center}
+  .brand-head h2{font-size:clamp(32px,6vw,54px);color:var(--ink)}
+  .brand-head h2 .gold{color:var(--primary)}
+  .brand-head p{color:var(--faint);font-weight:700;margin-top:8px}
+  .kit{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:24px 0 60px}
+  .kit-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:28px}
+  .kit-card.full{grid-column:1/-1}
+  .worldtag{display:inline-block;font-weight:800;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;border-radius:30px;margin-bottom:22px}
+  .worldtag.b{background:#FFE9C7;color:#E8402C}
+  .worldtag.q{background:#2E1F16;color:#F4A81E}
+  .logo-lockup{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+  .lk-badge{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+  .lk-badge.b{background:radial-gradient(circle at 30% 25%,#FFD23F,#FBB829 48%,#E8402C)}
+  .lk-badge.q{background:radial-gradient(circle at 30% 25%,#F4A81E,#EA5318 55%,#B22D17)}
+  .lk-badge span{font-size:30px;color:#1d120a}
+  .lk-word{line-height:.84;color:var(--ink)}
+  .lk-word small{display:block;font-family:'Hanken Grotesk';font-weight:800;font-size:9px;letter-spacing:3px;margin-top:6px}
+  .lk-word.b{font-family:'Lilita One';font-size:30px}
+  .lk-word.b small{color:#E8402C}
+  .lk-word.q{font-family:'Anton';font-size:30px}
+  .lk-word.q small{color:#F4A81E}
+  .swatches{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
+  .sw{border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+  .sw .chip2{height:54px}
+  .sw .meta{padding:8px 9px}
+  .sw .meta b{display:block;font-weight:800;font-size:11px;color:var(--ink)}
+  .sw .meta code{font-size:10px;color:var(--faint);font-family:'Hanken Grotesk';font-weight:700}
+  .typesample{margin-top:18px}
+  .typesample .ts{font-size:34px;line-height:1;color:var(--ink)}
+  .typesample .ts.b{font-family:'Lilita One'}
+  .typesample .ts.q{font-family:'Anton';text-transform:uppercase}
+  .typesample .tl{font-size:10.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);margin-bottom:8px}
+  .taglines{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
+  .tline{border:1px solid var(--line);border-radius:12px;padding:12px 16px;font-size:17px;color:var(--ink)}
+  .tline.lead{color:#fff;border:none}
+  .tline.lead.b{background:linear-gradient(120deg,#E8402C,#FBB829);font-family:'Lilita One'}
+  .tline.lead.q{background:linear-gradient(120deg,#B22D17,#EA5318);font-family:'Anton';text-transform:uppercase}
+  .shared{display:flex;gap:30px;flex-wrap:wrap}
+  .shared .blk{flex:1;min-width:240px}
+  .body-sample{font-family:'Hanken Grotesk';font-size:16px;color:var(--muted);line-height:1.5}
+  .script-sample{font-family:'Caveat';font-size:30px;color:var(--secondary)}
+  .tl2{font-size:10.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--primary);margin-bottom:8px}
+  @media(max-width:900px){.app-grid{grid-template-columns:1fr}.preview-col{position:static;max-width:340px;margin:0 auto}.kit{grid-template-columns:1fr}}
+</style>
+</head>
+<body data-theme="burger">
+
+<!-- ===== LOGIN GATE ===== -->
+<div class="gate" id="gate">
+  <div class="gate-card" id="gate-card">
+    <div class="badge"><span>B&amp;B</span></div>
+    <h2>Studio Access</h2>
+    <p>Private upload console.<br>Enter the password to continue.</p>
+    <input type="password" id="pw" placeholder="Password" autocomplete="current-password">
+    <div class="err" id="gate-err"></div>
+    <button class="btn btn-site" style="width:100%;margin-top:6px" onclick="unlock()">Unlock Studio →</button>
+  </div>
+</div>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="brand">
+    <div class="badge"><span>B&amp;B</span></div>
+    <div class="wordmark">Burgers<br>&amp; Brisket<small id="sub">SMASH · STACK · SCORE</small></div>
+    <span class="private-chip">● Private Studio</span>
+  </div>
+  <div class="world-toggle">
+    <button class="world-btn on" data-w="burger" onclick="setWorld('burger')">🍔 Burgers</button>
+    <button class="world-btn" data-w="bbq" onclick="setWorld('bbq')">🍖 Brisket &amp; BBQ</button>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="tabs">
+      <button class="tab active" data-t="app" onclick="show('app')">Creator</button>
+      <button class="tab" data-t="brand" onclick="show('brand')">Brand</button>
+    </div>
+    <a class="viewsite" href="index.html" target="_blank">View site ↗</a>
+  </div>
+</nav>
+
+<!-- ===== CREATOR ===== -->
+<section id="app" class="screen active">
+  <div class="wrap">
+    <div class="app-head">
+      <h2>The <span class="ember">Creator</span> Console</h2>
+      <p>Drop a review once → publish to the site and Instagram. It posts to whichever world you're in.</p>
+    </div>
+    <div class="app-grid">
+      <div class="panel">
+        <h3><span class="dot"></span> New Review</h3>
+        <div class="field">
+          <label>Cover Photo</label>
+          <div class="drop" id="drop" onclick="document.getElementById('file').click()">
+            <div id="drop-empty"><div class="ic">📸</div><b>Tap to upload a photo</b><span>JPG / PNG · shows in the preview</span></div>
+          </div>
+          <input type="file" id="file" accept="image/*" style="display:none" onchange="loadPhoto(event)">
+        </div>
+        <div class="row2">
+          <div class="field"><label>Spot Name</label><input type="text" id="f-spot" value="Patty Wagon" oninput="sync()"></div>
+          <div class="field"><label>City</label><input type="text" id="f-city" value="Austin, TX" oninput="sync()"></div>
+        </div>
+        <div class="field">
+          <label>Category</label>
+          <div class="seg" id="seg">
+            <button class="on" data-c="Burger" onclick="setCat(this)">🍔 Burger</button>
+            <button data-c="Brisket" onclick="setCat(this)">🥩 Brisket</button>
+            <button data-c="Both" onclick="setCat(this)">🔥 Both</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>The Score</label>
+          <div class="slider-wrap">
+            <input type="range" id="f-score" min="0" max="10" step="0.1" value="9.4" oninput="sync()">
+            <div class="scoreout"><span id="scoreVal">9.4</span><small>/10</small></div>
+          </div>
+        </div>
+        <div class="field"><label>One-Line Verdict</label><input type="text" id="f-verdict" value="Lacy crisp edges, cheese in every crevice." oninput="sync()"></div>
+        <div class="field"><label>Full Notes (site only)</label><textarea id="f-notes" rows="3" oninput="sync()">Smashed thin, edges shattering-crisp, American cheese in every crevice, bun toasted in beef fat. The platonic smash. Go hungry.</textarea></div>
+        <div class="btns">
+          <button class="btn btn-ghost" onclick="toast('Draft saved 📝')">Save Draft</button>
+          <button class="btn btn-site" onclick="toast('Published to site ✅')">Publish to Site</button>
+          <button class="btn btn-ig" onclick="toast('Pushed to Instagram 📲')">Push to Instagram</button>
+        </div>
+      </div>
+      <div class="preview-col">
+        <div class="preview-label">Live Instagram Preview</div>
+        <div class="phone">
+          <div class="ig">
+            <div class="ig-top">
+              <div class="ig-av">B&amp;B</div>
+              <div><b>burgersandbrisket</b><span id="ig-loc">Austin, TX</span></div>
+              <div class="dots">•••</div>
+            </div>
+            <div class="ig-img"><span class="emoji" id="ig-emoji">🍔</span><img id="ig-photo" style="display:none" alt="">
+              <div class="ig-seal"><div><b id="ig-score">9.4</b><i>/10</i></div></div>
+            </div>
+            <div class="ig-actions"><span>🤍</span><span>💬</span><span>📤</span><span class="save">🔖</span></div>
+            <div class="ig-likes">1,204 likes</div>
+            <div class="ig-cap"><b>burgersandbrisket</b> <span id="ig-cap"></span></div>
+          </div>
+        </div>
+        <div class="charcount"><span id="cc">0</span> / 2,200 characters</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BRAND ===== -->
+<section id="brand" class="screen">
+  <div class="wrap">
+    <div class="brand-head"><h2>The <span class="gold">Brand</span> System</h2><p>One name, two worlds — the toggle re-skins the whole site.</p></div>
+    <div class="kit">
+      <div class="kit-card">
+        <span class="worldtag b">🍔 Burger World — "Drive-Thru Pop"</span>
+        <div class="logo-lockup">
+          <div class="lk-badge b"><span style="font-family:'Lilita One'">B&amp;B</span></div>
+          <div class="lk-word b">Burgers<br>&amp; Brisket<small>SMASH · STACK · SCORE</small></div>
+        </div>
+        <div class="swatches">
+          <div class="sw"><div class="chip2" style="background:#FFF3DD"></div><div class="meta"><b>Cream</b><code>#FFF3DD</code></div></div>
+          <div class="sw"><div class="chip2" style="background:#E8402C"></div><div class="meta"><b>Ketchup</b><code>#E8402C</code></div></div>
+          <div class="sw"><div class="chip2" style="background:#FBB829"></div><div class="meta"><b>Mustard</b><code>#FBB829</code></div></div>
+          <div class="sw"><div class="chip2" style="background:#FFD23F"></div><div class="meta"><b>Cheese</b><code>#FFD23F</code></div></div>
+          <div class="sw"><div class="chip2" style="background:#3FA64C"></div><div class="meta"><b>Pickle</b><code>#3FA64C</code></div></div>
+          <div class="sw"><div class="chip2" style="background:#2A1206"></div><div class="meta"><b>Cocoa Ink</b><code>#2A1206</code></div></div>
+        </div>
+        <div class="typesample"><div class="tl">Display — Lilita One</div><div class="ts b">Smash. Stack. Score.</div></div>
+        <div class="taglines"><span class="tline lead b">Smash. Stack. Score.</span><span class="tline" style="font-family:'Lilita One'">Two buns, one number.</span><span class="tline" style="font-family:'Lilita One'">Hold the mercy.</span></div>
+      </div>
+      <div class="kit-card" style="background:#22160F;border-color:rgba(248,238,220,.12)">
+        <span class="worldtag q">🍖 BBQ World — "Pit &amp; Ember"</span>
+        <div class="logo-lockup">
+          <div class="lk-badge q"><span style="font-family:'Anton'">B&amp;B</span></div>
+          <div class="lk-word q" style="color:#F8EEDC">Burgers<br>&amp; Brisket<small>SMOKE · SEAR · SCORE</small></div>
+        </div>
+        <div class="swatches">
+          <div class="sw" style="border-color:rgba(248,238,220,.14)"><div class="chip2" style="background:#160F0C"></div><div class="meta"><b style="color:#F8EEDC">Charcoal</b><code style="color:#8A7868">#160F0C</code></div></div>
+          <div class="sw" style="border-color:rgba(248,238,220,.14)"><div class="chip2" style="background:#B22D17"></div><div class="meta"><b style="color:#F8EEDC">Brisket</b><code style="color:#8A7868">#B22D17</code></div></div>
+          <div class="sw" style="border-color:rgba(248,238,220,.14)"><div class="chip2" style="background:#EA5318"></div><div class="meta"><b style="color:#F8EEDC">Ember</b><code style="color:#8A7868">#EA5318</code></div></div>
+          <div class="sw" style="border-color:rgba(248,238,220,.14)"><div class="chip2" style="background:#F4A81E"></div><div class="meta"><b style="color:#F8EEDC">Mustard</b><code style="color:#8A7868">#F4A81E</code></div></div>
+          <div class="sw" style="border-color:rgba(248,238,220,.14)"><div class="chip2" style="background:#F8EEDC"></div><div class="meta"><b style="color:#F8EEDC">Bun Cream</b><code style="color:#8A7868">#F8EEDC</code></div></div>
+          <div class="sw" style="border-color:rgba(248,238,220,.14)"><div class="chip2" style="background:#8A7868"></div><div class="meta"><b style="color:#F8EEDC">Ash</b><code style="color:#8A7868">#8A7868</code></div></div>
+        </div>
+        <div class="typesample"><div class="tl" style="color:#EA5318">Display — Anton</div><div class="ts q" style="color:#F8EEDC">Smoke. Sear. Score.</div></div>
+        <div class="taglines"><span class="tline lead q">Smoke. Sear. Score.</span><span class="tline" style="font-family:'Anton';text-transform:uppercase;color:#F8EEDC;border-color:rgba(248,238,220,.18)">Two meats, one number.</span><span class="tline" style="font-family:'Anton';text-transform:uppercase;color:#F8EEDC;border-color:rgba(248,238,220,.18)">If it's got bark, it gets a mark.</span></div>
+      </div>
+      <div class="kit-card full">
+        <span class="worldtag" style="background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink)">Shared across both worlds</span>
+        <div class="shared">
+          <div class="blk"><div class="tl2">Body — Hanken Grotesk</div><p class="body-sample">Punchy, honest reviews with a number you can trust. The same clean voice carries verdicts, captions and notes — only the colors and energy change.</p></div>
+          <div class="blk"><div class="tl2">Accent — Caveat</div><div class="script-sample">fresh off the grill, baby 🔥</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="toast" style="position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--secondary);color:#1d120a;font-weight:800;padding:14px 24px;border-radius:50px;box-shadow:var(--shadow);z-index:200;transition:transform .35s;font-size:14px">Saved</div>
+
+<script>
+  /* ============================================================
+     CHANGE YOUR PASSWORD HERE  ↓↓↓
+     (Reminder: on a static site this is a deterrent, not strong
+     security. For a real lock, put Cloudflare Access in front.)
+  ============================================================ */
+  const STUDIO_PASSWORD = "smashscore";
+
+  function unlock(){
+    const v=document.getElementById('pw').value;
+    if(v===STUDIO_PASSWORD){document.getElementById('gate').style.display='none';}
+    else{
+      const c=document.getElementById('gate-card');
+      c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');
+      document.getElementById('gate-err').textContent='Nope — try again.';
+      document.getElementById('pw').value='';
+    }
+  }
+  document.getElementById('pw').addEventListener('keydown',e=>{if(e.key==='Enter')unlock();});
+
+  const subs={burger:'SMASH · STACK · SCORE',bbq:'SMOKE · SEAR · SCORE'};
+  let world='burger',cat='Burger',photoData=null;
+  const emojiMap={Burger:'🍔',Brisket:'🥩',Both:'🔥'};
+
+  function setWorld(w){
+    world=w;document.body.dataset.theme=w;
+    document.querySelectorAll('.world-btn').forEach(b=>b.classList.toggle('on',b.dataset.w===w));
+    document.getElementById('sub').textContent=subs[w];
+    const c=w==='burger'?'Burger':'Brisket';
+    document.querySelectorAll('#seg button').forEach(x=>x.classList.toggle('on',x.dataset.c===c));
+    cat=c;sync();
+  }
+  function show(id){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===id));
+    document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.t===id));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+  function setCat(b){document.querySelectorAll('#seg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');cat=b.dataset.c;sync();}
+
+  function loadPhoto(e){
+    const f=e.target.files[0];if(!f)return;
+    const r=new FileReader();
+    r.onload=ev=>{
+      photoData=ev.target.result;
+      const drop=document.getElementById('drop');
+      drop.classList.add('has');
+      drop.innerHTML=`<img src="${photoData}" alt="cover">`;
+      const igp=document.getElementById('ig-photo');
+      igp.src=photoData;igp.style.display='block';
+      document.getElementById('ig-emoji').style.display='none';
+    };
+    r.readAsDataURL(f);
+  }
+
+  function sync(){
+    const spot=document.getElementById('f-spot').value||'Your Spot';
+    const city=document.getElementById('f-city').value||'';
+    const score=parseFloat(document.getElementById('f-score').value).toFixed(1);
+    const verdict=document.getElementById('f-verdict').value||'';
+    document.getElementById('scoreVal').textContent=score;
+    document.getElementById('ig-score').textContent=score;
+    document.getElementById('ig-loc').textContent=city||'Location';
+    if(!photoData)document.getElementById('ig-emoji').textContent=emojiMap[cat];
+    const tag=cat.toLowerCase();
+    const cap=`${verdict}\n\n📍 ${spot}${city?' · '+city:''}\n🔥 Score: ${score}/10\n\n`;
+    const tags=`#burgersandbrisket #${tag} #bbq #burgerreview #brisket #foodie #eeeeeats`;
+    document.getElementById('ig-cap').innerHTML=cap.replace(/\n/g,'<br>')+`<span class="ig-tags">${tags}</span>`;
+    document.getElementById('cc').textContent=(cap+tags).length;
+  }
+
+  let tt;
+  function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.transform='translateX(-50%) translateY(0)';clearTimeout(tt);tt=setTimeout(()=>el.style.transform='translateX(-50%) translateY(120px)',2200);}
+
+  setWorld('burger');
+</script>
+</body>
+</html>
