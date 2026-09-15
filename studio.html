@@ -31,19 +31,6 @@
   h2,h3{font-family:var(--display);font-weight:400;letter-spacing:var(--ls);line-height:.94;text-transform:var(--tt)}
   ::selection{background:var(--primary);color:#fff}
 
-  /* ---- LOGIN GATE ---- */
-  .gate{position:fixed;inset:0;z-index:1000;background:var(--bg);display:grid;place-items:center;padding:24px}
-  .gate-card{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:40px 32px;max-width:380px;width:100%;text-align:center;box-shadow:var(--shadow)}
-  .gate .badge{width:64px;height:64px;margin:0 auto 20px}
-  .gate .badge span{font-size:26px}
-  .gate h2{font-size:30px;color:var(--ink)}
-  .gate p{color:var(--muted);font-size:14px;margin:8px 0 22px;line-height:1.45}
-  .gate input{width:100%;text-align:center;background:var(--bg);border:1px solid var(--line);border-radius:12px;color:var(--ink);font-family:'Hanken Grotesk';font-size:16px;font-weight:600;padding:13px 14px;letter-spacing:1px}
-  .gate input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 18%,transparent)}
-  .gate .err{color:var(--primary);font-size:13px;font-weight:700;margin-top:12px;min-height:18px}
-  .shake{animation:shake .4s}
-  @keyframes shake{0%,100%{transform:none}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
-
   .badge{width:46px;height:46px;border-radius:50%;flex:0 0 auto;background:var(--badge);display:grid;place-items:center;box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--secondary),0 8px 20px rgba(0,0,0,.3)}
   .badge span{font-family:var(--display);font-size:18px;color:#1d120a;letter-spacing:-1px}
   .nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:13px 22px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
@@ -170,18 +157,6 @@
 </style>
 </head>
 <body data-theme="burger">
-
-<!-- ===== LOGIN GATE ===== -->
-<div class="gate" id="gate">
-  <div class="gate-card" id="gate-card">
-    <div class="badge"><span>B&amp;B</span></div>
-    <h2>Studio Access</h2>
-    <p>Private upload console.<br>Enter the password to continue.</p>
-    <input type="password" id="pw" placeholder="Password" autocomplete="current-password">
-    <div class="err" id="gate-err"></div>
-    <button class="btn btn-site" style="width:100%;margin-top:6px" onclick="unlock()">Unlock Studio →</button>
-  </div>
-</div>
 
 <!-- ===== NAV ===== -->
 <nav class="nav">
@@ -323,25 +298,8 @@
 <div id="toast" style="position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--secondary);color:#1d120a;font-weight:800;padding:14px 24px;border-radius:50px;box-shadow:var(--shadow);z-index:200;transition:transform .35s;font-size:14px">Saved</div>
 
 <script>
-  /* ============================================================
-     CHANGE YOUR PASSWORD HERE  ↓↓↓
-     (Reminder: on a static site this is a deterrent, not strong
-     security. For a real lock, put Cloudflare Access in front.)
-  ============================================================ */
-  const STUDIO_PASSWORD = "smashscore";
-
-  function unlock(){
-    const v=document.getElementById('pw').value;
-    if(v===STUDIO_PASSWORD){document.getElementById('gate').style.display='none';}
-    else{
-      const c=document.getElementById('gate-card');
-      c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');
-      document.getElementById('gate-err').textContent='Nope — try again.';
-      document.getElementById('pw').value='';
-    }
-  }
-  document.getElementById('pw').addEventListener('keydown',e=>{if(e.key==='Enter')unlock();});
-
+  /* Access is handled by Cloudflare Access in front of this page —
+     no in-page password needed. */
   const subs={burger:'SMASH · STACK · SCORE',bbq:'SMOKE · SEAR · SCORE'};
   let world='burger',cat='Burger',photoData=null;
   const emojiMap={Burger:'🍔',Brisket:'🥩',Both:'🔥'};
