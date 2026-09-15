@@ -218,7 +218,7 @@
         <div class="field"><label>Full Notes (site only)</label><textarea id="f-notes" rows="3" oninput="sync()">Smashed thin, edges shattering-crisp, American cheese in every crevice, bun toasted in beef fat. The platonic smash. Go hungry.</textarea></div>
         <div class="btns">
           <button class="btn btn-ghost" onclick="toast('Draft saved 📝')">Save Draft</button>
-          <button class="btn btn-site" onclick="toast('Published to site ✅')">Publish to Site</button>
+          <button class="btn btn-site" onclick="publishToSite(this)">Publish to Site</button>
           <button class="btn btn-ig" onclick="toast('Pushed to Instagram 📲')">Push to Instagram</button>
         </div>
       </div>
@@ -301,7 +301,7 @@
   /* Access is handled by Cloudflare Access in front of this page —
      no in-page password needed. */
   const subs={burger:'SMASH · STACK · SCORE',bbq:'SMOKE · SEAR · SCORE'};
-  let world='burger',cat='Burger',photoData=null;
+  let world='burger',cat='Burger',photoData=null,photoFile=null;
   const emojiMap={Burger:'🍔',Brisket:'🥩',Both:'🔥'};
 
   function setWorld(w){
@@ -321,6 +321,7 @@
 
   function loadPhoto(e){
     const f=e.target.files[0];if(!f)return;
+    photoFile=f;
     const r=new FileReader();
     r.onload=ev=>{
       photoData=ev.target.result;
@@ -348,6 +349,32 @@
     const tags=`#burgersandbrisket #${tag} #bbq #burgerreview #brisket #foodie #eeeeeats`;
     document.getElementById('ig-cap').innerHTML=cap.replace(/\n/g,'<br>')+`<span class="ig-tags">${tags}</span>`;
     document.getElementById('cc').textContent=(cap+tags).length;
+  }
+
+  async function publishToSite(btn){
+    const spot=document.getElementById('f-spot').value.trim();
+    if(!spot){toast('Add a spot name first');return;}
+    const fd=new FormData();
+    fd.append('world',world);
+    fd.append('category',cat);
+    fd.append('spot',spot);
+    fd.append('city',document.getElementById('f-city').value.trim());
+    fd.append('score',document.getElementById('f-score').value);
+    fd.append('verdict',document.getElementById('f-verdict').value.trim());
+    fd.append('notes',document.getElementById('f-notes').value.trim());
+    fd.append('emoji',emojiMap[cat]);
+    if(photoFile)fd.append('photo',photoFile);
+    btn.disabled=true;const label=btn.textContent;btn.textContent='Publishing…';
+    try{
+      const r=await fetch('/api/admin/publish',{method:'POST',body:fd,credentials:'include'});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      toast('Published to site ✅');
+    }catch(err){
+      console.error(err);
+      toast('Publish failed — see console');
+    }finally{
+      btn.disabled=false;btn.textContent=label;
+    }
   }
 
   let tt;

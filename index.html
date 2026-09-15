@@ -102,6 +102,7 @@
   footer .scribble{color:var(--primary);font-size:20px;display:block;margin-bottom:8px}
   @media(max-width:900px){.hero-grid{grid-template-columns:1fr}.feed{grid-template-columns:repeat(2,1fr)}.stamp{display:none}}
   @media(max-width:560px){.nav{justify-content:center}.feed{grid-template-columns:1fr}}
+  .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 </style>
 </head>
 <body data-theme="burger">
@@ -126,7 +127,7 @@
         <a class="cta" href="#latest">See the latest drops →</a>
       </div>
       <div class="feature">
-        <div class="ph"><span class="emoji" id="ft-emoji">🍔</span>
+        <div class="ph"><span class="emoji" id="ft-emoji">🍔</span><img id="ft-photo" style="display:none" alt="">
           <div class="score-seal"><div><b id="ft-score">9.4</b><i>/10</i></div></div>
         </div>
         <div class="feature-body">
@@ -167,28 +168,48 @@
       board:[['Smokestack 47','Brisket · Austin','9.6'],['Low & Slow BBQ','Burnt Ends · KC','9.3'],['Ember & Oak','Beef Ribs · Nashville','9.1'],['Pit Boss Pete','Combo · Memphis','8.8']]}
   };
   let world='burger';
-  function setWorld(w){
+  let apiReviews={burger:null,bbq:null};
+  async function loadReviews(w){
+    try{const r=await fetch(`/api/reviews?world=${w}`,{cache:'no-store'});if(r.ok)apiReviews[w]=await r.json();}catch(e){}
+  }
+  function apiToItems(rows){
+    return rows.map(r=>({e:r.emoji||'🍔',n:r.spot,c:(r.category?r.category+' · ':'')+(r.city||''),s:Number(r.score).toFixed(1),t:[`${(r.emoji||'').trim()} ${r.category||''}`.trim()],photo:r.photo_url}));
+  }
+  function card(r){
+    const media=r.photo?`<img src="${r.photo}" alt="${r.n}">`:`<span class="emoji">${r.e}</span>`;
+    return `<div class="rev"><div class="ph">${media}<div class="score-seal"><div><b>${r.s}</b><i>/10</i></div></div></div><div class="rev-body"><h4>${r.n}</h4><div class="place">📍 ${r.c}</div><div class="tags">${r.t.map((t,i)=>`<span class="pill ${i===0?'hot':''}">${t}</span>`).join('')}</div></div></div>`;
+  }
+  async function setWorld(w){
     world=w;document.body.dataset.theme=w;
     document.querySelectorAll('.world-btn').forEach(b=>b.classList.toggle('on',b.dataset.w===w));
-    document.getElementById('sub').textContent=worlds[w].sub;renderSite();
+    document.getElementById('sub').textContent=worlds[w].sub;
+    if(apiReviews[w]===null)await loadReviews(w);
+    renderSite();
   }
   function renderSite(){
-    const w=worlds[world];
+    const w=worlds[world];const rows=apiReviews[world];const live=rows&&rows.length;
     document.getElementById('eyebrow').textContent=w.eyebrow;
     document.getElementById('h1').innerHTML=`${w.h1[0]}<em>${w.h1[1]}</em><span class="gold">${w.h1[2]}</span>`;
     document.getElementById('lede').textContent=w.lede;
-    document.getElementById('ft-emoji').textContent=w.ft.emoji;
-    document.getElementById('ft-score').textContent=w.ft.score;
-    document.getElementById('ft-kicker').textContent=w.ft.kicker;
-    document.getElementById('ft-name').textContent=w.ft.name;
-    document.getElementById('ft-place').textContent=w.ft.place;
-    document.getElementById('ft-verdict').innerHTML=w.ft.verdict;
+    let ft;
+    if(live){const t=[...rows].sort((a,b)=>b.score-a.score)[0];ft={emoji:t.emoji||'🍔',photo:t.photo_url,score:Number(t.score).toFixed(1),kicker:w.ft.kicker,name:t.spot,place:(t.city||''),verdict:t.verdict||''};}
+    else ft=w.ft;
+    document.getElementById('ft-score').textContent=ft.score;
+    document.getElementById('ft-kicker').textContent=ft.kicker;
+    document.getElementById('ft-name').textContent=ft.name;
+    document.getElementById('ft-place').textContent=ft.place;
+    document.getElementById('ft-verdict').innerHTML=ft.verdict||'';
+    const fte=document.getElementById('ft-emoji'),ftp=document.getElementById('ft-photo');
+    if(ft.photo){ftp.src=ft.photo;ftp.style.display='block';fte.style.display='none';}
+    else{ftp.style.display='none';fte.style.display='';fte.textContent=ft.emoji;}
+    const items=live?apiToItems(rows):w.feed;
     document.getElementById('feed-title').innerHTML=w.feedTitle;
     document.getElementById('feed-sub').textContent=w.feedSub;
-    document.getElementById('feed').innerHTML=w.feed.map(r=>`<div class="rev"><div class="ph"><span class="emoji">${r.e}</span><div class="score-seal"><div><b>${r.s}</b><i>/10</i></div></div></div><div class="rev-body"><h4>${r.n}</h4><div class="place">📍 ${r.c}</div><div class="tags">${r.t.map((t,i)=>`<span class="pill ${i===0&&r.hot?'hot':''}">${t}</span>`).join('')}</div></div></div>`).join('');
+    document.getElementById('feed').innerHTML=items.map(card).join('');
+    const board=live?[...rows].sort((a,b)=>b.score-a.score).slice(0,4).map(r=>[r.spot,(r.category?r.category+' · ':'')+(r.city||''),Number(r.score).toFixed(1)]):w.board;
     document.getElementById('board').style.setProperty('--board-emoji',w.boardEmoji);
     document.getElementById('board-title').textContent=w.boardTitle;
-    document.getElementById('board-rows').innerHTML=w.board.map((r,i)=>`<div class="board-row"><span class="rank">${String(i+1).padStart(2,'0')}</span><div class="nm">${r[0]}<span class="ct">${r[1]}</span></div><span class="sc">${r[2]}</span></div>`).join('');
+    document.getElementById('board-rows').innerHTML=board.map((r,i)=>`<div class="board-row"><span class="rank">${String(i+1).padStart(2,'0')}</span><div class="nm">${r[0]}<span class="ct">${r[1]}</span></div><span class="sc">${r[2]}</span></div>`).join('');
   }
   setWorld('burger');
 </script>
