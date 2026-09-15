@@ -103,6 +103,22 @@
   @media(max-width:900px){.hero-grid{grid-template-columns:1fr}.feed{grid-template-columns:repeat(2,1fr)}.stamp{display:none}}
   @media(max-width:560px){.nav{justify-content:center}.feed{grid-template-columns:1fr}}
   .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+  .feature{cursor:pointer}
+  .modal{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;place-items:center;padding:20px;overflow-y:auto}
+  .modal.open{display:grid}
+  .modal-card{background:var(--surface);border:1px solid var(--line);border-radius:24px;max-width:560px;width:100%;overflow:hidden;box-shadow:var(--shadow);position:relative;animation:pop .3s ease;margin:auto}
+  @keyframes pop{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+  .modal-x{position:absolute;top:14px;right:14px;z-index:6;width:38px;height:38px;border-radius:50%;border:none;background:rgba(0,0,0,.45);color:#fff;font-size:14px;font-weight:800;cursor:pointer;display:grid;place-items:center}
+  .modal-x:hover{background:rgba(0,0,0,.7)}
+  .modal-ph{position:relative;height:300px;display:grid;place-items:center;font-size:110px;background:linear-gradient(135deg,var(--surface2),var(--bg));overflow:hidden}
+  .modal-ph::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 20%,color-mix(in srgb,var(--primary) 40%,transparent),transparent 60%)}
+  .modal-ph .emoji{position:relative;z-index:1;filter:drop-shadow(0 10px 18px rgba(0,0,0,.35))}
+  .modal-ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+  .modal-ph .score-seal{width:96px;height:96px;bottom:-30px;right:26px}
+  .modal-ph .score-seal b{font-size:34px}
+  .modal-body{padding:34px 30px 32px}
+  .modal-body h3{font-size:clamp(30px,6vw,40px);margin:8px 0 5px;color:var(--ink)}
+  .modal-notes{margin-top:16px;font-size:15.5px;color:var(--muted);line-height:1.6;white-space:pre-wrap}
 </style>
 </head>
 <body data-theme="burger">
@@ -126,7 +142,7 @@
         <p class="lede" id="lede"></p>
         <a class="cta" href="#latest">See the latest drops →</a>
       </div>
-      <div class="feature">
+      <div class="feature" onclick="openFeatured()">
         <div class="ph"><span class="emoji" id="ft-emoji">🍔</span><img id="ft-photo" style="display:none" alt="">
           <div class="score-seal"><div><b id="ft-score">9.4</b><i>/10</i></div></div>
         </div>
@@ -150,6 +166,22 @@
   </div>
 </section>
 <footer><span class="scribble">fresh off the grill 🔥</span>Burgers &amp; Brisket © 2026 · burgersandbrisket.com · @burgersandbrisket</footer>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <button class="modal-x" onclick="closeModal()">✕</button>
+    <div class="modal-ph"><span class="emoji" id="m-emoji">🍔</span><img id="m-photo" style="display:none" alt="">
+      <div class="score-seal"><div><b id="m-score">9.4</b><i>/10</i></div></div>
+    </div>
+    <div class="modal-body">
+      <div class="kicker" id="m-kicker"></div>
+      <h3 id="m-name"></h3>
+      <div class="place">📍 <span id="m-sub"></span></div>
+      <p class="verdict" id="m-verdict"></p>
+      <div class="modal-notes" id="m-notes"></div>
+    </div>
+  </div>
+</div>
 <script>
   const worlds={
     burger:{sub:'SMASH · STACK · SCORE',eyebrow:'The juiciest burgers, ranked without mercy',h1:['Smash.','Stack.','Score.'],
@@ -172,12 +204,17 @@
   async function loadReviews(w){
     try{const r=await fetch(`/api/reviews?world=${w}`,{cache:'no-store'});if(r.ok)apiReviews[w]=await r.json();}catch(e){}
   }
-  function apiToItems(rows){
-    return rows.map(r=>({e:r.emoji||'🍔',n:r.spot,c:(r.category?r.category+' · ':'')+(r.city||''),s:Number(r.score).toFixed(1),t:[`${(r.emoji||'').trim()} ${r.category||''}`.trim()],photo:r.photo_url}));
+  let currentNorm=[],featuredNorm=null;
+  function normFeed(item){
+    if(item.spot!==undefined){
+      const emoji=item.emoji||'🍔';
+      return {name:item.spot,sub:(item.category?item.category+' · ':'')+(item.city||''),score:Number(item.score).toFixed(1),verdict:item.verdict||'',notes:item.notes||'',photo:item.photo_url||'',emoji,tags:[`${emoji} ${item.category||''}`.trim()]};
+    }
+    return {name:item.n,sub:item.c,score:item.s,verdict:item.verdict||'',notes:'',photo:item.photo||'',emoji:item.e,tags:item.t};
   }
-  function card(r){
-    const media=r.photo?`<img src="${r.photo}" alt="${r.n}">`:`<span class="emoji">${r.e}</span>`;
-    return `<div class="rev"><div class="ph">${media}<div class="score-seal"><div><b>${r.s}</b><i>/10</i></div></div></div><div class="rev-body"><h4>${r.n}</h4><div class="place">📍 ${r.c}</div><div class="tags">${r.t.map((t,i)=>`<span class="pill ${i===0?'hot':''}">${t}</span>`).join('')}</div></div></div>`;
+  function card(r,i){
+    const media=r.photo?`<img src="${r.photo}" alt="${r.name}">`:`<span class="emoji">${r.emoji}</span>`;
+    return `<div class="rev" onclick="openIdx(${i})"><div class="ph">${media}<div class="score-seal"><div><b>${r.score}</b><i>/10</i></div></div></div><div class="rev-body"><h4>${r.name}</h4><div class="place">📍 ${r.sub}</div><div class="tags">${r.tags.map((t,j)=>`<span class="pill ${j===0?'hot':''}">${t}</span>`).join('')}</div></div></div>`;
   }
   async function setWorld(w){
     world=w;document.body.dataset.theme=w;
@@ -191,26 +228,42 @@
     document.getElementById('eyebrow').textContent=w.eyebrow;
     document.getElementById('h1').innerHTML=`${w.h1[0]}<em>${w.h1[1]}</em><span class="gold">${w.h1[2]}</span>`;
     document.getElementById('lede').textContent=w.lede;
-    let ft;
-    if(live){const t=[...rows].sort((a,b)=>b.score-a.score)[0];ft={emoji:t.emoji||'🍔',photo:t.photo_url,score:Number(t.score).toFixed(1),kicker:w.ft.kicker,name:t.spot,place:(t.city||''),verdict:t.verdict||''};}
-    else ft=w.ft;
-    document.getElementById('ft-score').textContent=ft.score;
-    document.getElementById('ft-kicker').textContent=ft.kicker;
-    document.getElementById('ft-name').textContent=ft.name;
-    document.getElementById('ft-place').textContent=ft.place;
-    document.getElementById('ft-verdict').innerHTML=ft.verdict||'';
+    if(live){const t=[...rows].sort((a,b)=>b.score-a.score)[0];featuredNorm={name:t.spot,sub:(t.city||''),score:Number(t.score).toFixed(1),kicker:w.ft.kicker,verdict:t.verdict||'',notes:t.notes||'',photo:t.photo_url||'',emoji:t.emoji||'🍔'};}
+    else featuredNorm={name:w.ft.name,sub:w.ft.place,score:w.ft.score,kicker:w.ft.kicker,verdict:w.ft.verdict,notes:'',photo:'',emoji:w.ft.emoji};
+    document.getElementById('ft-score').textContent=featuredNorm.score;
+    document.getElementById('ft-kicker').textContent=featuredNorm.kicker;
+    document.getElementById('ft-name').textContent=featuredNorm.name;
+    document.getElementById('ft-place').textContent=featuredNorm.sub;
+    document.getElementById('ft-verdict').innerHTML=featuredNorm.verdict||'';
     const fte=document.getElementById('ft-emoji'),ftp=document.getElementById('ft-photo');
-    if(ft.photo){ftp.src=ft.photo;ftp.style.display='block';fte.style.display='none';}
-    else{ftp.style.display='none';fte.style.display='';fte.textContent=ft.emoji;}
-    const items=live?apiToItems(rows):w.feed;
+    if(featuredNorm.photo){ftp.src=featuredNorm.photo;ftp.style.display='block';fte.style.display='none';}
+    else{ftp.style.display='none';fte.style.display='';fte.textContent=featuredNorm.emoji;}
+    currentNorm=(live?rows:w.feed).map(normFeed);
     document.getElementById('feed-title').innerHTML=w.feedTitle;
     document.getElementById('feed-sub').textContent=w.feedSub;
-    document.getElementById('feed').innerHTML=items.map(card).join('');
+    document.getElementById('feed').innerHTML=currentNorm.map((n,i)=>card(n,i)).join('');
     const board=live?[...rows].sort((a,b)=>b.score-a.score).slice(0,4).map(r=>[r.spot,(r.category?r.category+' · ':'')+(r.city||''),Number(r.score).toFixed(1)]):w.board;
     document.getElementById('board').style.setProperty('--board-emoji',w.boardEmoji);
     document.getElementById('board-title').textContent=w.boardTitle;
     document.getElementById('board-rows').innerHTML=board.map((r,i)=>`<div class="board-row"><span class="rank">${String(i+1).padStart(2,'0')}</span><div class="nm">${r[0]}<span class="ct">${r[1]}</span></div><span class="sc">${r[2]}</span></div>`).join('');
   }
+  function openReview(n){
+    if(!n)return;
+    document.getElementById('m-score').textContent=n.score;
+    document.getElementById('m-kicker').textContent=n.kicker||'The Verdict';
+    document.getElementById('m-name').textContent=n.name;
+    document.getElementById('m-sub').textContent=n.sub||'';
+    const v=document.getElementById('m-verdict');v.innerHTML=n.verdict||'';v.style.display=n.verdict?'':'none';
+    const notes=document.getElementById('m-notes');notes.textContent=n.notes||'';notes.style.display=n.notes?'':'none';
+    const me=document.getElementById('m-emoji'),mp=document.getElementById('m-photo');
+    if(n.photo){mp.src=n.photo;mp.style.display='block';me.style.display='none';}
+    else{mp.style.display='none';me.style.display='';me.textContent=n.emoji||'🍔';}
+    document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden';
+  }
+  function openIdx(i){openReview(currentNorm[i]);}
+  function openFeatured(){openReview(featuredNorm);}
+  function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';}
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
   setWorld('burger');
 </script>
 </body>
