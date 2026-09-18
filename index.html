@@ -66,8 +66,7 @@
   .ph::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 20%,color-mix(in srgb,var(--primary) 40%,transparent),transparent 60%);border-radius:inherit}
   .ph .emoji{position:relative;z-index:1;filter:drop-shadow(0 10px 18px rgba(0,0,0,.35))}
   .score-seal{position:absolute;bottom:-26px;right:20px;z-index:4;width:84px;height:84px;border-radius:50%;background:var(--badge);display:grid;place-items:center;text-align:center;color:#1d120a;box-shadow:0 0 0 4px var(--surface),0 12px 24px rgba(0,0,0,.45);transform:rotate(-8deg)}
-  .score-seal b{font-family:var(--display);font-size:30px;line-height:.8}
-  .score-seal i{font-style:normal;font-family:'Hanken Grotesk';font-weight:800;font-size:9px;letter-spacing:1px}
+  .score-seal b{font-family:var(--display);font-size:30px;line-height:1;display:block;transform:translateY(.05em)}
   .feature-body{padding:26px 24px 24px}
   .kicker{font-weight:800;color:var(--primary);text-transform:uppercase;letter-spacing:1.5px;font-size:11px}
   .feature-body h3{font-size:30px;margin:8px 0 5px;color:var(--ink)}
@@ -145,7 +144,7 @@
       </div>
       <div class="feature" onclick="openFeatured()">
         <div class="ph"><span class="emoji" id="ft-emoji">🍔</span><img id="ft-photo" style="display:none" alt="">
-          <div class="score-seal"><div><b id="ft-score">9.4</b><i>/10</i></div></div>
+          <div class="score-seal"><b id="ft-score">9.4</b></div>
         </div>
         <div class="feature-body">
           <div class="kicker" id="ft-kicker"></div>
@@ -172,7 +171,7 @@
   <div class="modal-card">
     <button class="modal-x" onclick="closeModal()">✕</button>
     <div class="modal-ph"><span class="emoji" id="m-emoji">🍔</span><img id="m-photo" style="display:none" alt="">
-      <div class="score-seal"><div><b id="m-score">9.4</b><i>/10</i></div></div>
+      <div class="score-seal"><b id="m-score">9.4</b></div>
     </div>
     <div class="modal-body">
       <div class="kicker" id="m-kicker"></div>
@@ -221,7 +220,7 @@
   function card(r,i){
     const media=r.photo?`<img src="${r.photo}" alt="${r.name}">`:`<span class="emoji">${r.emoji}</span>`;
     const verdict=r.verdict?`<p class="rev-verdict">${r.verdict}</p>`:'';
-    return `<div class="rev" onclick="openIdx(${i})"><div class="ph">${media}<div class="score-seal"><div><b>${r.score}</b><i>/10</i></div></div></div><div class="rev-body"><h4>${r.name}</h4><div class="place">📍 ${r.sub}</div>${verdict}<div class="tags">${r.tags.map((t,j)=>`<span class="pill ${j===0?'hot':''}">${t}</span>`).join('')}</div></div></div>`;
+    return `<div class="rev" onclick="openIdx(${i})"><div class="ph">${media}<div class="score-seal"><b>${r.score}</b></div></div><div class="rev-body"><h4>${r.name}</h4><div class="place">📍 ${r.sub}</div>${verdict}<div class="tags">${r.tags.map((t,j)=>`<span class="pill ${j===0?'hot':''}">${t}</span>`).join('')}</div></div></div>`;
   }
   async function setWorld(w){
     world=w;document.body.dataset.theme=w;
