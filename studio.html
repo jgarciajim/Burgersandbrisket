@@ -166,6 +166,9 @@
   .draft-actions button{border:none;font-family:'Hanken Grotesk';font-weight:800;font-size:12px;padding:9px 13px;border-radius:10px;cursor:pointer}
   .d-cont{background:var(--primary);color:#fff}
   .d-del{background:transparent;border:1px solid var(--line);color:var(--faint)}
+  .draft-status{font-size:9.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:4px 8px;border-radius:20px;white-space:nowrap}
+  .draft-status.live{background:color-mix(in srgb,var(--accent3) 18%,transparent);color:var(--accent3)}
+  .draft-status.draft{background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--faint)}
   .drafts-empty{text-align:center;color:var(--faint);font-weight:700;padding:50px 0}
 </style>
 </head>
@@ -185,7 +188,7 @@
   <div style="display:flex;align-items:center;gap:12px">
     <div class="tabs">
       <button class="tab active" data-t="app" onclick="show('app')">Creator</button>
-      <button class="tab" data-t="drafts" onclick="show('drafts')">Drafts</button>
+      <button class="tab" data-t="drafts" onclick="show('drafts')">Manage</button>
       <button class="tab" data-t="brand" onclick="show('brand')">Brand</button>
     </div>
     <a class="viewsite" href="index.html" target="_blank">View site ↗</a>
@@ -229,6 +232,7 @@
           </div>
         </div>
         <div class="field"><label>One-Line Verdict</label><input type="text" id="f-verdict" value="Lacy crisp edges, cheese in every crevice." oninput="sync()"></div>
+        <div class="field"><label>Tags <span style="text-transform:none;letter-spacing:0;color:var(--faint)">— comma separated, show as pills</span></label><input type="text" id="f-tags" value="Crispy Edges, Cheese Pull" placeholder="e.g. Crispy Edges, Top 3 Ever"></div>
         <div class="field"><label>Full Notes (site only)</label><textarea id="f-notes" rows="3" oninput="sync()">Smashed thin, edges shattering-crisp, American cheese in every crevice, bun toasted in beef fat. The platonic smash. Go hungry.</textarea></div>
         <div class="btns">
           <button class="btn btn-ghost" onclick="saveReview(0,this)">Save Draft</button>
@@ -263,8 +267,8 @@
 <section id="drafts" class="screen">
   <div class="wrap">
     <div class="app-head">
-      <h2>Saved <span class="ember">Drafts</span></h2>
-      <p>Pick up where you left off, then publish when it's ready.</p>
+      <h2>Manage <span class="ember">Posts</span></h2>
+      <p>Edit or delete anything — live posts and drafts. Editing loads it back into the Creator form.</p>
     </div>
     <div id="drafts-list" class="drafts-list"></div>
   </div>
@@ -390,6 +394,7 @@
     fd.append('city',document.getElementById('f-city').value.trim());
     fd.append('score',document.getElementById('f-score').value);
     fd.append('verdict',document.getElementById('f-verdict').value.trim());
+    fd.append('tags',document.getElementById('f-tags').value.trim());
     fd.append('notes',document.getElementById('f-notes').value.trim());
     fd.append('emoji',emojiMap[cat]);
     if(photoFile)fd.append('photo',photoFile);
@@ -409,7 +414,7 @@
   }
 
   function markEditing(){
-    document.getElementById('form-title').textContent=currentDraftId?'Editing Draft':'New Review';
+    document.getElementById('form-title').textContent=currentDraftId?'Editing Post':'New Review';
     document.getElementById('newbtn').style.display=currentDraftId?'':'none';
   }
 
@@ -418,6 +423,7 @@
     document.getElementById('f-spot').value='';
     document.getElementById('f-city').value='';
     document.getElementById('f-verdict').value='';
+    document.getElementById('f-tags').value='';
     document.getElementById('f-notes').value='';
     document.getElementById('f-score').value='8.0';
     const drop=document.getElementById('drop');drop.classList.remove('has');drop.innerHTML=DROP_EMPTY;
@@ -442,16 +448,17 @@
       if(!r.ok)throw new Error('HTTP '+r.status);
       draftsCache=await r.json();
       renderDrafts();
-    }catch(err){console.error(err);box.innerHTML='<div class="drafts-empty">Couldn\'t load drafts — see console.</div>';}
+    }catch(err){console.error(err);box.innerHTML='<div class="drafts-empty">Couldn\'t load posts — see console.</div>';}
   }
 
   function renderDrafts(){
     const box=document.getElementById('drafts-list');
-    if(!draftsCache.length){box.innerHTML='<div class="drafts-empty">No drafts yet. Hit “Save Draft” in the Creator tab to stash one.</div>';return;}
+    if(!draftsCache.length){box.innerHTML='<div class="drafts-empty">Nothing here yet. Publish a review or save a draft from the Creator tab.</div>';return;}
     box.innerHTML=draftsCache.map(d=>{
       const thumb=d.photo_url?`<img src="${d.photo_url}" alt="">`:(d.emoji||'🍔');
       const w=d.world==='bbq'?'🍖 BBQ':'🍔 Burger';
-      return `<div class="draft"><div class="draft-thumb">${thumb}</div><div class="draft-info"><b>${d.spot||'Untitled'}</b><span>${w}${d.city?' · '+d.city:''}</span></div><div class="draft-score">${Number(d.score||0).toFixed(1)}</div><div class="draft-actions"><button class="d-cont" onclick="continueDraft(${d.id})">Continue</button><button class="d-del" onclick="deleteDraft(${d.id})">✕</button></div></div>`;
+      const status=d.published?'<span class="draft-status live">● Live</span>':'<span class="draft-status draft">Draft</span>';
+      return `<div class="draft"><div class="draft-thumb">${thumb}</div><div class="draft-info"><b>${d.spot||'Untitled'}</b><span>${w}${d.city?' · '+d.city:''}</span></div>${status}<div class="draft-score">${Number(d.score||0).toFixed(1)}</div><div class="draft-actions"><button class="d-cont" onclick="continueDraft(${d.id})">Edit</button><button class="d-del" onclick="deleteDraft(${d.id})">✕</button></div></div>`;
     }).join('');
   }
 
@@ -464,6 +471,7 @@
     document.getElementById('f-spot').value=d.spot||'';
     document.getElementById('f-city').value=d.city||'';
     document.getElementById('f-verdict').value=d.verdict||'';
+    document.getElementById('f-tags').value=d.tags||'';
     document.getElementById('f-notes').value=d.notes||'';
     document.getElementById('f-score').value=d.score||8;
     setPhotoPreview(d.photo_url||'');
@@ -471,13 +479,14 @@
   }
 
   async function deleteDraft(id){
-    if(!confirm('Discard this draft?'))return;
+    const d=draftsCache.find(x=>x.id===id);
+    if(!confirm(d&&d.published?'Delete this LIVE post? It will be removed from the site.':'Discard this draft?'))return;
     const fd=new FormData();fd.append('_action','delete');fd.append('id',id);
     try{
       const r=await fetch('/api/admin/publish',{method:'POST',body:fd,credentials:'include'});
       if(!r.ok)throw new Error('HTTP '+r.status);
       if(currentDraftId===id)clearForm();
-      draftsCache=draftsCache.filter(x=>x.id!==id);renderDrafts();toast('Draft discarded');
+      draftsCache=draftsCache.filter(x=>x.id!==id);renderDrafts();toast('Deleted');
     }catch(err){console.error(err);toast('Delete failed — see console');}
   }
 
