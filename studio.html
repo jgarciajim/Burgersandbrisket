@@ -169,6 +169,8 @@
   .draft-status{font-size:9.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:4px 8px;border-radius:20px;white-space:nowrap}
   .draft-status.live{background:color-mix(in srgb,var(--accent3) 18%,transparent);color:var(--accent3)}
   .draft-status.draft{background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--faint)}
+  .d-star{background:transparent;border:1px solid var(--line);color:var(--faint);font-size:15px;line-height:1}
+  .d-star.on{background:color-mix(in srgb,var(--secondary) 22%,transparent);color:var(--secondary);border-color:var(--secondary)}
   .drafts-empty{text-align:center;color:var(--faint);font-weight:700;padding:50px 0}
 </style>
 </head>
@@ -458,7 +460,8 @@
       const thumb=d.photo_url?`<img src="${d.photo_url}" alt="">`:(d.emoji||'🍔');
       const w=d.world==='bbq'?'🍖 BBQ':'🍔 Burger';
       const status=d.published?'<span class="draft-status live">● Live</span>':'<span class="draft-status draft">Draft</span>';
-      return `<div class="draft"><div class="draft-thumb">${thumb}</div><div class="draft-info"><b>${d.spot||'Untitled'}</b><span>${w}${d.city?' · '+d.city:''}</span></div>${status}<div class="draft-score">${Number(d.score||0).toFixed(1)}</div><div class="draft-actions"><button class="d-cont" onclick="continueDraft(${d.id})">Edit</button><button class="d-del" onclick="deleteDraft(${d.id})">✕</button></div></div>`;
+      const star=d.published?`<button class="d-star ${Number(d.featured)===1?'on':''}" onclick="featurePost(${d.id})" title="Feature this">${Number(d.featured)===1?'★':'☆'}</button>`:'';
+      return `<div class="draft"><div class="draft-thumb">${thumb}</div><div class="draft-info"><b>${d.spot||'Untitled'}</b><span>${w}${d.city?' · '+d.city:''}</span></div>${status}<div class="draft-score">${Number(d.score||0).toFixed(1)}</div><div class="draft-actions">${star}<button class="d-cont" onclick="continueDraft(${d.id})">Edit</button><button class="d-del" onclick="deleteDraft(${d.id})">✕</button></div></div>`;
     }).join('');
   }
 
@@ -488,6 +491,20 @@
       if(currentDraftId===id)clearForm();
       draftsCache=draftsCache.filter(x=>x.id!==id);renderDrafts();toast('Deleted');
     }catch(err){console.error(err);toast('Delete failed — see console');}
+  }
+
+  async function featurePost(id){
+    const d=draftsCache.find(x=>x.id===id);if(!d)return;
+    const make=!(Number(d.featured)===1);
+    const fd=new FormData();fd.append('_action','feature');fd.append('id',id);fd.append('value',make?1:0);
+    try{
+      const r=await fetch('/api/admin/publish',{method:'POST',body:fd,credentials:'include'});
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      if(make){draftsCache.forEach(x=>{if(x.world===d.world)x.featured=0;});d.featured=1;}
+      else d.featured=0;
+      renderDrafts();
+      toast(make?(d.world==='bbq'?'⭐ Cook of the Week set':'⭐ Burger of the Week set'):'Removed from featured');
+    }catch(err){console.error(err);toast('Failed — see console');}
   }
 
   let tt;

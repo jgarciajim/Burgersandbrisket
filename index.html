@@ -234,7 +234,7 @@
     document.getElementById('eyebrow').textContent=w.eyebrow;
     document.getElementById('h1').innerHTML=`${w.h1[0]}<em>${w.h1[1]}</em><span class="gold">${w.h1[2]}</span>`;
     document.getElementById('lede').textContent=w.lede;
-    if(live){const t=[...rows].sort((a,b)=>b.score-a.score)[0];featuredNorm={name:t.spot,sub:(t.city||''),score:Number(t.score).toFixed(1),kicker:w.ft.kicker,verdict:t.verdict||'',notes:t.notes||'',photo:t.photo_url||'',emoji:t.emoji||'🍔',tags:buildTags(t.emoji,t.category,t.tags)};}
+    if(live){const t=rows.find(r=>Number(r.featured)===1)||[...rows].sort((a,b)=>b.score-a.score)[0];featuredNorm={name:t.spot,sub:(t.city||''),score:Number(t.score).toFixed(1),kicker:w.ft.kicker,verdict:t.verdict||'',notes:t.notes||'',photo:t.photo_url||'',emoji:t.emoji||'🍔',tags:buildTags(t.emoji,t.category,t.tags)};}
     else featuredNorm={name:w.ft.name,sub:w.ft.place,score:w.ft.score,kicker:w.ft.kicker,verdict:w.ft.verdict,notes:'',photo:'',emoji:w.ft.emoji,tags:[]};
     document.getElementById('ft-score').textContent=featuredNorm.score;
     document.getElementById('ft-kicker').textContent=featuredNorm.kicker;
